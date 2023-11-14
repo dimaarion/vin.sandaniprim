@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind screens;
+
+
+.mt-min-1{
+    margin-top: -20px;
+}
+
+#flag:hover #in-flag {
+    display: block;
+}
+
+#in-search {
+    width: 250px;
+}
+
+#in-search input {
+    width: 250px;
+}
+
+#in-user {
+    width: 250px;
+    margin-left: -160px;
+    text-align: center;
+}
+
+.label-transform {
+    font-size: 8pt;
+    transition: 0.2s;
+    margin-top: 0px;
+}
+
+.slide {
+    flex-shrink: 0;
+}
+
+.slider img {
+    poiner-events: none;
+}
+
+.product:hover .product-icon {
+    opacity: 1;
+    transition: 1s;
+    transform: rotateX(360deg);
+}
+
+
+.product:hover .product-icon:nth-child(1){
+    transition-delay: .1s;
+}
+
+.product:hover .product-icon:nth-child(2){
+    transition-delay: .5s;
+}
+.product:hover .product-icon:nth-child(3){
+    transition-delay: 1s;
+}
+.product-icon:hover{
+    transition: 0.1s;
+    transition-delay: 1ms;
+
+}
+
+.product:hover .product-content {
+    opacity: 0;
+    transition: 1s;
+
+}
+
+.product-icon {
+    margin-top: -50px;
+    opacity: 0;
+    transition: 1s;
+
+}
+
+.product-content {
+    transition: 1s;
+}
+
+.product {
+    cursor: pointer;
+}
+
+.head-bar{position:-webkit-sticky; position:sticky; top:0;z-index: 50;}
+.contacts:hover .icon{
+    background-color: #434648;
+    transition: 1s;
+}
+.contacts div:nth-last-child(1){
+    color: #97a0a6;
+    transition: 1s;
+}
+.footer-list div{
+    color: #97a0a6;
+    cursor: pointer;
+    transition: 1s;
+}
+.footer-list div:hover{
+    color: #e84b4b;
+    transition: 1s;
+}
+#scrolls{
+    width: 60px;
+    text-align: center;
+}
+#catalog-header img:nth-child(2){
+    cursor: pointer;
+}
+
+#catalog-header .active .catalog-item-bg{
+    background-color: #621212;
+}
+#catalog-header .tabs:hover .catalog-item-bg{
+    background-color: #621212;
+    transition: 0.5s;
+}
