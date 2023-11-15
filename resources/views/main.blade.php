@@ -164,16 +164,17 @@
                 <h3 class="text-center font-cinzel text-xl">
                     Откройте для себя разнообразие вкусов молдавских вин в нашем интернет-магазине
                 </h3>
+
                 <div id="catalog-header"
-                     class="justify-center slider-track grid grid-flow-col auto-cols-max h-[250px] mt-8 mb-4">
+                     class="justify-center slider-track grid grid-flow-col auto-cols-max h-[250px]  mb-3">
                     <div id="catalog-tab-0" class="text-center px-2 py-2 mx-3 w-32 active relative slide tabs">
                         <div class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
                         <img class="w-[90%] top-0 bottom-0 left-0 right-0 m-auto absolute"
                              src="{{@asset('storage/catalog1.png')}}">
                        <div class="absolute bottom-0 m-auto left-0 right-0 my-4 py-4 text-xl">Красное вино</div>
                     </div>
-                    <div class="  justify-center self-center flex ">
-                      <x-icon-razdel />
+                    <div class="justify-center self-center flex text-gray-700 w-[93px]">
+
                     </div>
                     <div id="catalog-tab-1" class="text-center px-2 py-2 mx-3 w-32 relative slide tabs">
                         <div class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
@@ -181,8 +182,8 @@
                              src="{{@asset('storage/catalog1.png')}}">
                         <div class="absolute bottom-0 m-auto left-0 right-0 my-4 py-4 text-xl">Красное вино</div>
                     </div>
-                    <div class="justify-center self-center flex ">
-                        <img src="{{@asset("storage/razdel.png")}}">
+                    <div class="justify-center self-center flex text-gray-700 w-[93px]">
+
                     </div>
                     <div id="catalog-tab-2" class="text-center px-2 py-2 mx-3 w-32 relative slide tabs">
                         <div class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
@@ -190,8 +191,8 @@
                              src="{{@asset('storage/catalog1.png')}}">
                         <div class="absolute bottom-0 m-auto left-0 right-0 my-4 py-4 text-xl">Красное вино</div>
                     </div>
-                    <div class="justify-center self-center flex ">
-                        <img src="{{@asset("storage/razdel.png")}}">
+                    <div class="justify-center self-center flex text-gray-700 w-[93px]">
+
                     </div>
                     <div id="catalog-tab-3" class="text-center px-2 py-2 mx-3 w-32 relative slide tabs">
                         <div class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
@@ -199,8 +200,8 @@
                              src="{{@asset('storage/catalog1.png')}}">
                         <div class="absolute bottom-0 m-auto left-0 right-0 my-4 py-4 text-xl">Красное вино</div>
                     </div>
-                    <div class="justify-center self-center flex ">
-                        <img src="{{@asset("storage/razdel.png")}}">
+                    <div class="justify-center self-center flex text-gray-700 w-[93px]">
+
                     </div>
                     <div id="catalog-tab-4" class="text-center px-2 py-2 mx-3 w-32 relative slide tabs">
                         <div class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
@@ -3083,6 +3084,7 @@
                           <div class="mx-4 text-2xl "><h2>Новость</h2></div>
                       </div>
                         <div class="text-xl font-serif">Как уроженец Калифорнии, я большой поклонник вина! Местное вино - мое слабое место, и я никогда не упускал возможности попробовать какое-нибудь новое вино… </div>
+                        <div class="text-xl text-right text-pink-950 hover:text-gray-950"><a href="/#">Подробнее . . .</a></div>
                     </div>
                     <div>
                         <div class="flex font-alice">
@@ -3097,7 +3099,7 @@
                         <div class="text-xl font-serif">
                             Как уроженец Калифорнии, я большой поклонник вина! Местное вино - мое слабое место, и я никогда не упускал возможности попробовать какое-нибудь новое вино…
                         </div>
-                        <div class="text-xl text-right">Подробнее</div>
+                        <div class="text-xl text-right text-pink-950 hover:text-gray-950"><a href="/#">Подробнее . . .</a></div>
                     </div>
                     <div>
                         <div class="flex font-alice">
@@ -3110,6 +3112,7 @@
                             <div class="mx-4 text-2xl "><h2>Новость</h2></div>
                         </div>
                         <div class="text-xl font-serif">Как уроженец Калифорнии, я большой поклонник вина! Местное вино - мое слабое место, и я никогда не упускал возможности попробовать какое-нибудь новое вино… </div>
+                        <div class="text-xl text-right text-pink-950 hover:text-gray-950"><a href="/#">Подробнее . . .</a></div>
                     </div>
                     <div>
                         <div class="flex font-alice">
@@ -3122,6 +3125,7 @@
                             <div class="mx-4 text-2xl "><h2>Новость</h2></div>
                         </div>
                         <div class="text-xl font-serif">Как уроженец Калифорнии, я большой поклонник вина! Местное вино - мое слабое место, и я никогда не упускал возможности попробовать какое-нибудь новое вино… </div>
+                        <div class="text-xl text-right text-pink-950 hover:text-gray-950"><a href="/#">Подробнее . . .</a></div>
                     </div>
                 </div>
             </div>

@@ -546,6 +546,21 @@ function tabs(id, cl) {
 }
 
 
+function contactFooter() {
+    let contact = document.querySelector("#contact-footer");
+    let tel = document.querySelector("#tel-footer");
+    let close = document.querySelector("#close-contact");
+    tel.addEventListener("click",(el)=>{
+        contact.classList.add("contact")
+        tel.classList.add("hidden");
+    });
+    close.addEventListener("click",()=>{
+        contact.classList.remove("contact");
+        tel.classList.remove("hidden");
+    })
+}
+
+
 getData();
 
 displayClass(".on-search", "#in-search", search, close);
@@ -566,7 +581,6 @@ document.querySelectorAll(".bi-cart-fill").forEach((el) => {
     el.parentElement.addEventListener("click", () => getViewCart(close))
 })
 
-let tabArr = new Array(3)
-
 tabs("catalog-tab-", "products");
+contactFooter();
 

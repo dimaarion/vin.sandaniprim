@@ -1,4 +1,4 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="94px" height="13px" viewBox="0 0 94 13" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" height="13px" viewBox="0 0 94 13" version="1.1">
     <g id="разделение">
         <path d="M0 0L94 0L94 13L0 13L0 0Z" id="Прямоугольник-3" fill="#FFFFFF" fill-rule="evenodd" stroke="none"/>
         <path d="M43 6C43 3.23858 45.2386 1 48 1C50.7614 1 53 3.23858 53 6C53 8.76142 50.7614 11 48 11C45.2386 11 43 8.76142 43 6Z" id="Овал" fill="currentColor" fill-rule="evenodd" stroke="none"/>
