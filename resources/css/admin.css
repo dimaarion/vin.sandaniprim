@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind screens;
+
+#search-phrases a{
+    color: #621212 !important;
+}
+#search-phrases a:hover{
+    text-decoration-line: underline;
+}

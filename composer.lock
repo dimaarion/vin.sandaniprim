@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8374ddb07785f236ebf8bc6b08d36957",
+    "content-hash": "784dc77c0ed7a9a577f1da7066ae503c",
     "packages": [
+        {
+            "name": "axp-dev/ya-metrika",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axp-dev/ya-metrika.git",
+                "reference": "ef396ba9aee361551bfa3d0d644564e35f698137"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/axp-dev/ya-metrika/zipball/ef396ba9aee361551bfa3d0d644564e35f698137",
+                "reference": "ef396ba9aee361551bfa3d0d644564e35f698137",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.4.3",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "monolog/monolog": "^2.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AXP\\YaMetrika\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Pushkarev",
+                    "email": "axp-dev@yandex.com",
+                    "homepage": "https://github.com/axp-dev"
+                }
+            ],
+            "description": "Yandex Metrika API Library",
+            "homepage": "https://github.com/axp-dev/ya-metrika",
+            "keywords": [
+                "api",
+                "metrika",
+                "yandex"
+            ],
+            "support": {
+                "issues": "https://github.com/axp-dev/ya-metrika/issues",
+                "source": "https://github.com/axp-dev/ya-metrika/tree/2.2.0"
+            },
+            "time": "2022-07-30T14:55:45+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",

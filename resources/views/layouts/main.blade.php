@@ -173,13 +173,13 @@
                                     Forgot your password?
                                 </a>
                             </div>
-                            <div class="h-16 justify-center w-full">
+                            <div class="h-12 justify-center w-full">
                                 <button type="submit"
                                         class="inline-flex w-3/4 justify-center items-center  py-2 bg-pink-950 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-dark dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 ">
                                     Войти
                                 </button>
                             </div>
-
+                            <div class="h-10 flex justify-center hover:text-pink-950"><div class="self-center"><a href="/register">Зарегестритоваться</a> </div></div>
                         </div>
 
                     </div>

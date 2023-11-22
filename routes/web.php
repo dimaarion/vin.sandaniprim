@@ -14,21 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\MainController::class, 'index']);
+Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name("home");
 Route::resource('cart', \App\Http\Controllers\CartController::class);
 
-Route::get('/test',function (\Illuminate\Http\Request $request){
 
-    return response()->json([
-        'name' => 'Abigail',
-        'state' => 'CA',
-        'id'=>$request->get("id")
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,3 +26,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::resource('dashboard', \App\Http\Controllers\AdminController::class,)->middleware(['auth', 'verified']);
+Route::resource('dashboard/{surliest}', \App\Http\Controllers\AdminController::class,)->middleware(['auth', 'verified']);

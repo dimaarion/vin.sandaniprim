@@ -19,6 +19,7 @@
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@tailwindcss/container-queries": "^0.1.1",
         "@tailwindcss/typography": "^0.5.10",
+        "frappe-charts": "^1.6.2",
         "mobile-detect": "^1.4.5",
         "tw-elements": "^1.0.0"
     }
