@@ -27,5 +27,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('dashboard', \App\Http\Controllers\AdminController::class,)->middleware(['auth', 'verified']);
-Route::resource('dashboard/{surliest}', \App\Http\Controllers\AdminController::class,)->middleware(['auth', 'verified']);
+Route::resource('dashboard', \App\Http\Controllers\AdminController::class)->middleware(['auth', 'verified']);
+Route::post("/dashboard/surliest",[\App\Http\Controllers\AdminController::class,"store"])->middleware(['auth', 'verified']);

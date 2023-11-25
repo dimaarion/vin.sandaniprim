@@ -77,6 +77,8 @@ class AdminController extends Controller
         if($request->get("category") == "removeUser"){
             $userRemove = User::find($request->get("userid"));
             $userRemove->delete();
+            Role::where("user_id",$request->get("userid"))->delete();
+
         }
         if($request->get("category") == "roleUser"){
             $role = new Role();

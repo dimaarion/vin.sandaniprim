@@ -10,6 +10,7 @@ import {
     Collapse,
     Select,
     Ripple,
+    Input,
     initTE,
 } from "tw-elements";
 import createForEach from "alpinejs";
@@ -19,14 +20,14 @@ import axios from "axios";
 window.Alpine = Alpine;
 
 Alpine.start();
-initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Ripple, Lightbox});
+initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Ripple, Lightbox,Input});
 
 class Admin {
 
     save = "Сохранено";
     negative = "Ошибка";
     del = "Удалено";
-    id = 91390982;
+    id = 91390101;
     key = "OAuth y0_AgAAAAALk4mfAAa0oAAAAADyNDbpfM-dOxo6SS-2k85vvD71PojCyo4";
     date1 = "18-11-2023";
     month = "";
@@ -85,9 +86,13 @@ class Admin {
                             category: 'removeUser',
                             userid: parseInt(userId.textContent),
                         }
+                    }).then((response)=>{
+                        console.log(response)
                     }).catch((response) => {
                         console.log(response)
+
                     });
+                    console.log("del")
                     this.response(this.del, 1)
                     item.remove();
                     removeBlock.classList.add("hidden");
@@ -95,8 +100,8 @@ class Admin {
                 })
 
                 closeEl.addEventListener("click", () => {
-                    item.remove();
-                    removeBlock.classList.add("hidden");
+                   item.remove();
+                   removeBlock.classList.add("hidden");
                 })
             });
 
@@ -145,39 +150,83 @@ class Admin {
     isUrl(url) {
         return document.baseURI.search(url);
     }
+
     dateTime() {
         let d = new Date();
         let y = d.getFullYear();
         let date = d.getDate();
         let month = d.getMonth();
         let date1Month = (y) + "-" + (month) + "-" + date;
+        let date1Week = (y) + "-" + (month + 1) + "-" + (date - 7);
         let date1Year = (y - 1) + "-" + (month + 1) + "-" + date;
         this.month = date + "." + month + "." + y + " - " + date + "." + (month + 1) + "." + y
         let titleAdmin = document.querySelectorAll(".title-admin");
 
-        titleAdmin.forEach((el)=>{
-            el.href = "?date1=" + date1Year + "&group=month";
+        titleAdmin.forEach((el) => {
+            el.href = "/dashboard?date1=" + date1Year + "&group=month";
         })
-        this.date1 = document.location.search.replace("?","");
+        this.date1 = document.location.search.replace("?", "");
+        let dateSelector = document.querySelector(".date-selector");
+        if (dateSelector) {
+            let td = dateSelector.getElementsByTagName("td");
+            let select = dateSelector.getElementsByTagName("select");
+            for (let i = 0; i < td.length; i++) {
+                td.item(i).addEventListener("click", () => {
+                    if (i === 0) {
+                        document.location = "/dashboard?date1=7daysAgo&group=day";
+                    } else if (i === 1) {
+                        document.location = "/dashboard?date1=30daysAgo&group=week";
+                    } else if (i === 2) {
+                        document.location = "/dashboard?date1=" + date1Year + "&group=month";
+                    }
+
+                })
+            }
+            for (let i = 0; i < select.length; i++) {
+                select.item(i).addEventListener("change", (el) => {
+                    if (select.item(i).getAttribute("data-selector") === "7daysAgo") {
+                        document.location = "/dashboard?date1=7daysAgo&group=" + el.target.value;
+                    } else if (select.item(i).getAttribute("data-selector") === "30daysAgo") {
+                        document.location = "/dashboard?date1=30daysAgo&group=" + el.target.value;
+                    } else if (select.item(i).getAttribute("data-selector") === 'year') {
+                        document.location = "/dashboard?date1=" + date1Year + "&group=" + el.target.value;
+                    }
+                })
+            }
+
+        }
     }
 
 
-    getMetrikYear() {
+    dimensions(metrikaApiJSON, n = 0) {
+        return metrikaApiJSON.data.map((d) => d.dimensions[n]);
+    }
+
+    metrics(metrikaApiJSON, n = 0) {
+        return metrikaApiJSON.data.map((d) => d.metrics[n]);
+    }
+
+    getMetrikYear(params) {
         fetch(
-            this.url + '?preset=sources_summary&' + this.date1 + '&ym:s:isRobot==No&id=' + this.id, {
+            this.url + '/bytime?'+ params +'&lang=ru&' + this.date1 + '&id=' + this.id, {
                 headers: {
                     "Authorization": this.key
                 }
             })
             .then(r => r.json())
             .then(metrikaApiJSON => {
-                this.setDateV("#chart",metrikaApiJSON);
-                let names = metrikaApiJSON.data.map((d) => d.dimensions[1]).filter((f) => f.name !== null).map((n) => n.name);
-                let viz = metrikaApiJSON.data.map((d) => d.metrics[0]);
-                let pr = metrikaApiJSON.data.map((d) => d.metrics[1]);
-                let otk = metrikaApiJSON.data.map((d) => d.metrics[2]);
-                let glPr = metrikaApiJSON.data.map((d) => d.metrics[3]);
-                let timesV = metrikaApiJSON.data.map((d) => d.metrics[4]);
+
+                this.setDateV("#chart", metrikaApiJSON);
+
+
+                let names = this.dimensions(metrikaApiJSON).map((n) => n.name);
+                let viz = this.metrics(metrikaApiJSON)[0];
+                let pr = this.metrics(metrikaApiJSON, 1)[0];
+                let otk = this.metrics(metrikaApiJSON, 2)[0];
+                let glPr = this.metrics(metrikaApiJSON, 3)[0];
+                let timesV = this.metrics(metrikaApiJSON, 4)[0];
+
+
                 const data = {
                     labels: names,
                     datasets: [
@@ -188,22 +237,11 @@ class Admin {
                         {
                             name: "Просмотры", type: "bar",
                             values: pr
-                        },
-                        {
-                            name: "Отказы %", type: "bar",
-                            values: otk
-                        },
-                        {
-                            name: "Глубина пр.", type: "bar",
-                            values: glPr
-                        },
-                        {
-                            name: "Время (сек.)", type: "bar",
-                            values: timesV
                         }
+
                     ]
                 }
-                const chart = new Chart("#chart", {  // or a DOM element,
+                new Chart("#chart", {  // or a DOM element,
                     // new Chart() in case of ES6 module with above usage
                     title: "My Awesome Chart",
                     data: data,
@@ -216,39 +254,60 @@ class Admin {
 
     }
 
-setDateV(id,data){
-    let block = document.querySelector(id);
-    let date = document.createElement("div");
-    block.parentElement.appendChild(date);
-    date.className = "absolute top-0 right-0 m-auto mr-4 mt-3 text-lg" ;
-    date.innerHTML = data.query.date1.replace(/[-]+/g,".") + " - " + data.query.date2.replace(/[-]+/g,".")
-}
-    getTraffic() {
+    setDateV(id, data) {
+        if (data.query) {
+            let block = document.querySelector(id);
+            let date = document.createElement("div");
+            block.parentElement.appendChild(date);
+            date.className = "absolute top-0 right-0 m-auto mr-4 mt-3 text-lg";
+            date.innerHTML = data.query.date1.replace(/[-]+/g, ".") + " - " + data.query.date2.replace(/[-]+/g, ".")
+
+        }
+    }
+
+    getTraffic(v,n = 0) {
+        document.querySelector("#grafic-visits").getElementsByTagName("h2")[0].innerHTML = v;
         fetch(
-            this.url + '/bytime?metrics=ym:s:visits&'+ this.date1 +'&date2=today&ym:s:isRobot==No&id=' + this.id, {
+            this.url + '/bytime?metrics=ym:s:visits,ym:s:pageviews,ym:s:users,ga:pageviewsPerSession&' + this.date1 + '&date2=today&ym:s:isRobot==No&id=' + this.id, {
                 headers: {
                     "Authorization": this.key
                 }
             })
             .then(r => r.json())
             .then(metrikaApiJSON => {
-                this.setDateV("#visits",metrikaApiJSON);
-                let metrics = metrikaApiJSON.data.map((d) => d.metrics[0]);
-                let monts = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-                let m = metrikaApiJSON.time_intervals.map((x)=>x[0].match(/([0-9])([0-9])/g)[2].replace(/^[0]/,""));
-                let mont = monts.map((el,i)=>[{
-                    'name':el,
-                     "count":i + 1
+                this.setDateV("#visits", metrikaApiJSON);
+                let metrics = this.metrics(metrikaApiJSON);
+                let pageviews = this.metrics(metrikaApiJSON, 1);
+                let users = this.metrics(metrikaApiJSON, 2);
+                let pageCount = this.metrics(metrikaApiJSON, 3);
+                let monts = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+                let m = metrikaApiJSON.time_intervals.map((x) => x[0].match(/([0-9])([0-9])/g)[2].replace(/^[0]/, ""));
+                let mont = monts.map((el, i) => [{
+                    'name': el,
+                    "count": i + 1
                 }][0]);
-                function df(n){
-                  return  mont.filter((x)=>x.count === n)
+
+                function df(n) {
+                    return mont.filter((x) => x.count === n)
                 }
+
+                let value = metrics[0];
+                if (n === 0) {
+                    value = metrics[0];
+                } else if (n === 1) {
+                    value = pageviews[0];
+                } else if (n === 2) {
+                    value = users[0];
+                } else if (n === 3) {
+                    value = pageCount[0];
+                }
+
                 const data = {
-                    labels: m.map((x)=>df(parseInt(x))[0].name),
+                    labels: m.map((x) => df(parseInt(x))[0].name),
                     datasets: [
                         {
-                            name: "Визиты", type: "bar",
-                            values: metrics[0]
+                            name: v, type: "bar",
+                            values: value
                         }
                     ]
                 }
@@ -261,8 +320,24 @@ setDateV(id,data){
                     colors: ['#7cd6fd', '#743ee2', 'red', 'green', '#ffd963']
                 })
 
+                document.querySelector(".visit-max").innerHTML = this.countPlus(metrics[0]);
+                document.querySelector(".pageviews-max").innerHTML = this.countPlus(pageviews[0]);
+                document.querySelector(".users-max").innerHTML = this.countPlus(users[0]);
+                document.querySelector(".page-count-max").innerHTML = this.countPlus(pageCount[0]);
+
             })
     }
+
+
+
+    countPlus(a) {
+        let count = 0;
+        a.forEach((el) => {
+            count += el;
+        })
+        return count;
+    }
+
 
     getMetrikSearchPhrases() {
         fetch(
@@ -273,7 +348,7 @@ setDateV(id,data){
             })
             .then(r => r.json())
             .then(metrikaApiJSON => {
-                this.setDateV("#search-phrases",metrikaApiJSON);
+                this.setDateV("#search-phrases", metrikaApiJSON);
                 this.createTableEl(metrikaApiJSON, "#search-phrases", 0);
             })
     }
@@ -289,7 +364,7 @@ setDateV(id,data){
         table.className = "min-w-full text-left text-sm font-light"
         p.className = "relative my-4";
         p.appendChild(table);
-        let headname = ['Название', 'Визиты', 'Просмотры', 'Отказы %', 'Глубина просмотра', 'Время, проведенное на сайте, в секундах'];
+        let headname = ['Название', 'Визиты', 'Просмотры'];
         table.appendChild(thead);
         let trh = document.createElement("tr");
         thead.appendChild(trh);
@@ -307,7 +382,7 @@ setDateV(id,data){
             let tr = document.createElement("tr");
             tr.className = "border-b dark:border-neutral-500"
             table.appendChild(tr);
-            let td = [p.name, metrics[i][0], metrics[i][1], metrics[i][2], metrics[i][3], metrics[i][4]];
+            let td = [p.name, metrics[i][0], metrics[i][1]];
             td.map((t, j) => {
                 td = tr.appendChild(document.createElement("td"));
                 if (p.url !== undefined) {
@@ -323,27 +398,13 @@ setDateV(id,data){
                 }
             })
         })
-        p.appendChild(btn);
-        btn.className = "absolute m-auto bottom-0 right-0 pr-4";
-        btn.setAttribute("style", "height:50px;width:100px;color:blue;")
-        btn.innerHTML = "Развернуть";
-        p.style.height = this.height;
-        btn.addEventListener("click", () => {
-            if (p.clientHeight === 300) {
-                p.style.height = "auto";
-                btn.innerHTML = "Свернуть";
-            } else {
-                p.style.height = this.height;
-                btn.innerHTML = "Развернуть";
-            }
 
-        })
     }
 
     getMetrikVEngines() {
         let browsers = document.querySelector("#browsers");
         fetch(
-            this.url + '?preset=tech_platforms&dimensions=ym:s:browser&' + this.date1 + '&id=' + this.id, {
+            this.url + '/bytime?preset=interests2&lang=ru&' + this.date1 + '&id=' + this.id, {
                 headers: {
                     "Authorization": "OAuth y0_AgAAAAALk4mfAAa0oAAAAADyNDbpfM-dOxo6SS-2k85vvD71PojCyo4"
                 }
@@ -351,13 +412,7 @@ setDateV(id,data){
             .then(r => r.json())
             .then(metrikaApiJSON => {
 
-                let metrics = metrikaApiJSON.data.map((d) => d.metrics)
-                metrikaApiJSON.data.map((d) => d.dimensions[0]).map((br, i) => {
-
-                    let brName = browsers.appendChild(document.createElement("div"));
-                    brName.className = "w-full h-[50px] my-3 flex gap-4";
-                    brName.innerHTML = '<div class="h-full self-center w-[100px] "><img class="h-full m-auto" src="' + document.location.origin + "/storage/" + br.name.split(" ")[0].replace(":", "") + '.svg" alt="' + br.name + '" /></div><div class="self-center w-[150px]">' + br.name + '</div><div class="self-center">' + metrics[i][0] + '</div>'
-                })
+               console.log(metrikaApiJSON)
             })
     }
 
@@ -376,6 +431,7 @@ setDateV(id,data){
 
     scrolling() {
         let scrolls = document.querySelector("#scrolls");
+
         function changes() {
             if (window.scrollY > 10) {
                 scrolls.classList.replace("opacity-0", "opacity-100");
@@ -399,18 +455,85 @@ setDateV(id,data){
         })
     }
 
+    trafficView(){
+        this.getTraffic("Визиты",0)
+        document.querySelectorAll(".list-select-max").forEach((el, i) => {
+            el.addEventListener("click", () => {
+                this.getTraffic(el.getElementsByTagName("h6")[0].textContent,i);
+                document.querySelectorAll(".list-select-max").forEach((x,j)=>{
+                    if(i === j){
+                        x.getElementsByTagName("h5")[0].classList.add("border-gray-950")
+                    }else {
+                        x.getElementsByTagName("h5")[0].classList.remove("border-gray-950")
+                    }
+                })
+            });
+        })
+        this.getMetrikYear("preset=geo_country&dimensions=ga:city");
+       document.querySelectorAll(".list-summary").forEach((summary,i)=>{
+           summary.addEventListener("click",()=>{
+               if(i === 0){
+                   this.getMetrikYear("preset=geo_country&dimensions=ga:city");
+               }else if (i === 1){
+                   this.getMetrikYear("preset=tech_browsers");
+               }else if(i === 2){
+                   this.getMetrikYear("preset=search_engines");
+               }else if(i === 3){
+                   this.getMetrikYear("preset=interests2");
+               }
+               document.querySelectorAll(".list-summary").forEach((el,j)=>{
+                   if(i === j){
+                       el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
+                   }else if(i === j){
+                       el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
+                   }else {
+                       el.getElementsByTagName("h5")[0].classList.remove("border-gray-950")
+                   }
+               })
+
+           })
+       })
+
+
+    }
+
+
+    addProduct(){
+       let addProduct = document.querySelector("#add-product");
+       let input = addProduct.getElementsByTagName("input");
+       let button = addProduct.getElementsByTagName("button");
+       let image = document.querySelector(".image");
+       button = button.item(0);
+       button.addEventListener("change",()=>{
+
+       })
+        for (let key in input) {
+             if(input.item(key).type === "file"){
+                 input.item(key).addEventListener("change",(el)=>{
+                     image.src = URL.createObjectURL(el.target.files[0])
+console.log(el.target.files[0])
+                 })
+             }
+        }
+
+    }
+
     view() {
         this.dateTime();
-        this.isUrl("dashboard/surliest");
-        this.urlMenu();
-        this.adminStatus();
-        this.deleteUser();
+        if (document.querySelector("#menu")) {
+            this.isUrl("dashboard/surliest");
+            this.urlMenu();
+            this.adminStatus();
+            this.deleteUser();
+        }
         if (document.querySelector("#metrics")) {
-            this.getMetrikYear();
             this.getMetrikSearchPhrases();
-            this.getMetrikVEngines();
+           // this.getMetrikVEngines();
             this.getPageContent();
-            this.getTraffic();
+            this.trafficView();
+        }
+        if(document.querySelector("#add-product")){
+            this.addProduct();
         }
         this.scrolling();
     }
@@ -418,17 +541,6 @@ setDateV(id,data){
 
 const admin = new Admin();
 admin.view();
-/*
-fetch(
-    'https://api-metrika.yandex.net/stat/v1/data?dimensions=ym:s:searchEngine&metrics=ym:s:visits,ym:s:users&filters=ym:s:trafficSource==%27organic%27%20AND%20ym:s:isRobot==%27No%27&id=42913549', {
-        headers: {
-            "Authorization": "OAuth y0_AgAAAAALk4mfAAa0oAAAAADyNDbpfM-dOxo6SS-2k85vvD71PojCyo4"
-        }
-    })
-    .then(r => r.json())
-    .then(metrikaApiJSON => {
-   console.log(metrikaApiJSON)
-    })
 
 
-*/
+

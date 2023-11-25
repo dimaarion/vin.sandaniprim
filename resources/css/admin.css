@@ -9,3 +9,15 @@
 #search-phrases a:hover{
     text-decoration-line: underline;
 }
+.list-select-max:hover{
+
+    transition: 1s;
+}
+.list-select-max{
+    cursor: pointer;
+    transition: 1s;
+}
+.mi-30{
+   margin-top: -30px;
+    transition: 1s;
+}
