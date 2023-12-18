@@ -19,11 +19,15 @@ class Product extends Model
         'keywords',
         'price',
         'discount',
-        'category',
+        'category_id',
     ];
 
     public function order()
     {
         return $this->belongsToMany(Order::class, "order_product");
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 }

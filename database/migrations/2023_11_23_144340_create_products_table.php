@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string("keywords");
             $table->double("price");
             $table->double("discount");
-            $table->string("category");
+            $table->integer("category_id");
             $table->timestamps();
         });
     }

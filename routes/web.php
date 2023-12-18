@@ -25,7 +25,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
 
+
+Route::get('/dashboard/{name}/{id}', [\App\Http\Controllers\AdminController::class, 'edit'])->middleware(['auth', 'verified'])->name('dashboard.edit');
 Route::resource('dashboard', \App\Http\Controllers\AdminController::class)->middleware(['auth', 'verified']);
+Route::get('/dashboard/addproduct', [\App\Http\Controllers\AdminController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard.show');
 Route::post("/dashboard/surliest",[\App\Http\Controllers\AdminController::class,"store"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/addproduct",[\App\Http\Controllers\AdminController::class,"addProduct"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/addcategory",[\App\Http\Controllers\AdminController::class,"addCategory"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/edit",[\App\Http\Controllers\AdminController::class,"editProduct"])->middleware(['auth', 'verified']);
+require __DIR__.'/auth.php';

@@ -9,6 +9,7 @@ import {
     Lightbox,
     Collapse,
     Select,
+    Modal,
     Ripple,
     Input,
     initTE,
@@ -20,7 +21,7 @@ import axios from "axios";
 window.Alpine = Alpine;
 
 Alpine.start();
-initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Ripple, Lightbox,Input});
+initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox, Input});
 
 class Admin {
 
@@ -33,6 +34,13 @@ class Admin {
     month = "";
     url = "https://api-metrika.yandex.net/stat/v1/data";
     height = '300px';
+    closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">\n' +
+        '  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>\n' +
+        '  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>\n' +
+        '</svg>';
+    delIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">\n' +
+        '<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>\n' +
+        '</svg>';
 
 
     response(text, n = 0) {
@@ -51,6 +59,10 @@ class Admin {
         }
     }
 
+    getSelector(selector) {
+        return document.querySelector(selector);
+    }
+
     deleteUser() {
         let remove = document.querySelectorAll(".remove");
         remove.forEach((e, i) => {
@@ -66,9 +78,7 @@ class Admin {
                 let userItem = document.getElementsByClassName("user_item")[i];
 
                 closeEl.className = "flex justify-end p-6 cursor-pointer  hover:text-pink-950"
-                closeEl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">\n' +
-                    '  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>\n' +
-                    '</svg>';
+                closeEl.innerHTML = this.closeIcon;
                 removeBlock.appendChild(item);
                 item.appendChild(closeEl);
                 item.appendChild(user);
@@ -86,7 +96,7 @@ class Admin {
                             category: 'removeUser',
                             userid: parseInt(userId.textContent),
                         }
-                    }).then((response)=>{
+                    }).then((response) => {
                         console.log(response)
                     }).catch((response) => {
                         console.log(response)
@@ -100,8 +110,8 @@ class Admin {
                 })
 
                 closeEl.addEventListener("click", () => {
-                   item.remove();
-                   removeBlock.classList.add("hidden");
+                    item.remove();
+                    removeBlock.classList.add("hidden");
                 })
             });
 
@@ -155,6 +165,9 @@ class Admin {
         let d = new Date();
         let y = d.getFullYear();
         let date = d.getDate();
+        if (date.toString().length === 1) {
+            date = "0" + date;
+        }
         let month = d.getMonth();
         let date1Month = (y) + "-" + (month) + "-" + date;
         let date1Week = (y) + "-" + (month + 1) + "-" + (date - 7);
@@ -208,7 +221,7 @@ class Admin {
 
     getMetrikYear(params) {
         fetch(
-            this.url + '/bytime?'+ params +'&lang=ru&' + this.date1 + '&id=' + this.id, {
+            this.url + '/bytime?' + params + '&lang=ru&' + this.date1 + '&id=' + this.id, {
                 headers: {
                     "Authorization": this.key
                 }
@@ -217,8 +230,6 @@ class Admin {
             .then(metrikaApiJSON => {
 
                 this.setDateV("#chart", metrikaApiJSON);
-
-
                 let names = this.dimensions(metrikaApiJSON).map((n) => n.name);
                 let viz = this.metrics(metrikaApiJSON)[0];
                 let pr = this.metrics(metrikaApiJSON, 1)[0];
@@ -265,7 +276,7 @@ class Admin {
         }
     }
 
-    getTraffic(v,n = 0) {
+    getTraffic(v, n = 0) {
         document.querySelector("#grafic-visits").getElementsByTagName("h2")[0].innerHTML = v;
         fetch(
             this.url + '/bytime?metrics=ym:s:visits,ym:s:pageviews,ym:s:users,ga:pageviewsPerSession&' + this.date1 + '&date2=today&ym:s:isRobot==No&id=' + this.id, {
@@ -282,9 +293,11 @@ class Admin {
                 let pageCount = this.metrics(metrikaApiJSON, 3);
                 let monts = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
                 let m = metrikaApiJSON.time_intervals.map((x) => x[0].match(/([0-9])([0-9])/g)[2].replace(/^[0]/, ""));
+
+
                 let mont = monts.map((el, i) => [{
                     'name': el,
-                    "count": i + 1
+                    "count": i + 1,
                 }][0]);
 
                 function df(n) {
@@ -301,7 +314,7 @@ class Admin {
                 } else if (n === 3) {
                     value = pageCount[0];
                 }
-
+                console.log(m.map((x) => df(parseInt(x))[0]))
                 const data = {
                     labels: m.map((x) => df(parseInt(x))[0].name),
                     datasets: [
@@ -311,7 +324,7 @@ class Admin {
                         }
                     ]
                 }
-                const chart = new Chart("#visits", {  // or a DOM element,
+                new Chart("#visits", {  // or a DOM element,
                     // new Chart() in case of ES6 module with above usage
                     title: "My Awesome Chart",
                     data: data,
@@ -327,7 +340,6 @@ class Admin {
 
             })
     }
-
 
 
     countPlus(a) {
@@ -412,7 +424,7 @@ class Admin {
             .then(r => r.json())
             .then(metrikaApiJSON => {
 
-               console.log(metrikaApiJSON)
+                console.log(metrikaApiJSON)
             })
     }
 
@@ -455,67 +467,344 @@ class Admin {
         })
     }
 
-    trafficView(){
-        this.getTraffic("Визиты",0)
+    trafficView() {
+        this.getTraffic("Визиты", 0)
         document.querySelectorAll(".list-select-max").forEach((el, i) => {
             el.addEventListener("click", () => {
-                this.getTraffic(el.getElementsByTagName("h6")[0].textContent,i);
-                document.querySelectorAll(".list-select-max").forEach((x,j)=>{
-                    if(i === j){
+                this.getTraffic(el.getElementsByTagName("h6")[0].textContent, i);
+                document.querySelectorAll(".list-select-max").forEach((x, j) => {
+                    if (i === j) {
                         x.getElementsByTagName("h5")[0].classList.add("border-gray-950")
-                    }else {
+                    } else {
                         x.getElementsByTagName("h5")[0].classList.remove("border-gray-950")
                     }
                 })
             });
-        })
-        this.getMetrikYear("preset=geo_country&dimensions=ga:city");
-       document.querySelectorAll(".list-summary").forEach((summary,i)=>{
-           summary.addEventListener("click",()=>{
-               if(i === 0){
-                   this.getMetrikYear("preset=geo_country&dimensions=ga:city");
-               }else if (i === 1){
-                   this.getMetrikYear("preset=tech_browsers");
-               }else if(i === 2){
-                   this.getMetrikYear("preset=search_engines");
-               }else if(i === 3){
-                   this.getMetrikYear("preset=interests2");
-               }
-               document.querySelectorAll(".list-summary").forEach((el,j)=>{
-                   if(i === j){
-                       el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
-                   }else if(i === j){
-                       el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
-                   }else {
-                       el.getElementsByTagName("h5")[0].classList.remove("border-gray-950")
-                   }
-               })
+        });
 
-           })
-       })
+
+        this.getMetrikYear("preset=geo_country&dimensions=ga:city");
+        document.querySelectorAll(".list-summary").forEach((summary, i) => {
+            summary.addEventListener("click", () => {
+                if (i === 0) {
+                    this.getMetrikYear("preset=geo_country&dimensions=ga:city");
+                } else if (i === 1) {
+                    this.getMetrikYear("preset=tech_browsers");
+                } else if (i === 2) {
+                    this.getMetrikYear("preset=search_engines");
+                } else if (i === 3) {
+                    this.getMetrikYear("preset=interests2");
+                }
+                document.querySelectorAll(".list-summary").forEach((el, j) => {
+                    if (i === j) {
+                        el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
+                    } else if (i === j) {
+                        el.getElementsByTagName("h5")[0].classList.add("border-gray-950")
+                    } else {
+                        el.getElementsByTagName("h5")[0].classList.remove("border-gray-950")
+                    }
+                })
+
+            })
+        })
 
 
     }
 
 
-    addProduct(){
-       let addProduct = document.querySelector("#add-product");
-       let input = addProduct.getElementsByTagName("input");
-       let button = addProduct.getElementsByTagName("button");
-       let image = document.querySelector(".image");
-       button = button.item(0);
-       button.addEventListener("change",()=>{
+    addProduct() {
+        let addProduct = document.querySelector("#add-product");
+        let input = addProduct.getElementsByTagName("input");
+        let button = document.querySelector("#add-product-save");
+        let image = document.querySelector(".image");
+        let file = document.querySelector("#add-product-file");
+        let nameImage = document.querySelector(".name-image");
+        let nameProduct = document.querySelector("#add-name-product");
+        let titleProduct = document.querySelector("#add-title-product");
+        let descriptionProduct = document.querySelector("#add-description-product");
+        let titlePageProduct = document.querySelector("#add-title-page-product");
+        let descriptionPageProduct = document.querySelector("#add-description-page-product");
+        let keyWordProduct = document.querySelector("#add-keyword-product");
+        let categoryProduct = document.querySelector("#add-category-product");
+        let addPrice = document.querySelector("#add-price-product");
+        let addDiscount = document.querySelector("#add-discount-product");
 
-       })
-        for (let key in input) {
-             if(input.item(key).type === "file"){
-                 input.item(key).addEventListener("change",(el)=>{
-                     image.src = URL.createObjectURL(el.target.files[0])
-console.log(el.target.files[0])
-                 })
-             }
+        this.replaceNum(addPrice);
+        this.replaceNum(addDiscount);
+        addPrice.addEventListener("click", (event) => {
+            event.target.value = "";
+        })
+        addDiscount.addEventListener("click", (event) => {
+            event.target.value = "";
+        })
+
+
+
+        button.addEventListener("click", () => {
+            if (button.value === "add-product-save") {
+                const NUMERIC_REGEXP = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g;
+                const numbers = addPrice.value.match(NUMERIC_REGEXP);
+                const numDisc = addDiscount.value.match(NUMERIC_REGEXP);
+                numbers ? addPrice.value = numbers.join("") : addPrice.value = 0;
+                numDisc ? addDiscount.value = numDisc.join("") : addDiscount.value = 0;
+                axios({
+                    method: "post",
+                    url: "/dashboard/addproduct",
+                    data: {
+                        nameProduct: nameProduct.value ? nameProduct.value : "-1",
+                        titleProduct: titleProduct.value ? titleProduct.value : "-1",
+                        descriptionProduct: descriptionProduct.value ? descriptionProduct.value : "-1",
+                        titlePageProduct: titlePageProduct.value ? titlePageProduct.value : "-1",
+                        descriptionPageProduct: descriptionPageProduct.value ? descriptionPageProduct.value : "-1",
+                        keyWordProduct: keyWordProduct.value ? keyWordProduct.value : "-1",
+                        image: image.src,
+                        price: addPrice.value,
+                        discount: addDiscount.value,
+                        categoryId: categoryProduct.value ? categoryProduct.value : "-1",
+                        button: button.value
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        document.location = "/dashboard/product"
+                    }
+                    console.log(response)
+                })
+
+            } else {
+
+            }
+
+        });
+
+
+        file.addEventListener("change", (el) => {
+            image.src = window.URL.createObjectURL(el.target.files[0]);
+            nameImage.innerHTML = el.target.files[0].name;
+        })
+    }
+
+    getFiles(file,image,nameImage){
+        file.addEventListener("change", (el) => {
+            image.src = window.URL.createObjectURL(el.target.files[0]);
+            nameImage.innerHTML = el.target.files[0].name;
+        })
+    }
+
+    addCategory() {
+        let addCategory = document.querySelector("#add-category-save");
+        let addCategoryText = document.querySelector("#add-category-text");
+        let addSubCategoryText = document.querySelector("#add-sub-category-text");
+        let categoryProduct = document.querySelector("#add-category-product");
+
+        addCategory.addEventListener("click", (event2) => {
+            if (addCategoryText.value.length > 3) {
+                if (addSubCategoryText.value <= 0) {
+                    addSubCategoryText.value = "нет";
+                }
+                axios({
+                    method: "post",
+                    url: "/dashboard/addcategory",
+                    data: {
+                        name: addCategoryText.value,
+                        subName: addSubCategoryText.value
+                    }
+                }).then((response) => {
+                    let option = document.createElement("option");
+                    categoryProduct.appendChild(option);
+                    option.value = response.data.name;
+                    option.innerHTML = response.data.name;
+
+                    console.log(response.data)
+                })
+                addCategoryText.value = "";
+                addCategoryText.parentElement.style.border = "";
+                addSubCategoryText.value = "";
+            } else {
+                addCategoryText.parentElement.style.border = " 1px solid red";
+            }
+        })
+    }
+
+
+    dellCategory() {
+        let delCategory = this.getSelector("#del-category");
+        let category = this.getSelector("#add-category-product");
+        if (delCategory) {
+            delCategory.addEventListener("click", (el) => {
+                let col_1 = document.createElement("div");
+                let blockCategory = document.createElement("div");
+                document.body.appendChild(blockCategory);
+                blockCategory.classList = "fixed m-auto top-0 left-0 right-0 bottom-0 w-1/2 bg-white p-6 overflow-y-auto";
+                blockCategory.appendChild(col_1);
+                col_1.innerHTML = category.innerHTML.replace(/option/g, "div");
+                col_1.innerHTML = col_1.innerHTML.replace(/value/g, "data-id")
+
+                let divList = col_1.querySelectorAll("div");
+                let close = document.createElement("div");
+                blockCategory.appendChild(close);
+                close.innerHTML = this.closeIcon;
+                close.className = "absolute top-0 right-0 cursor-pointer";
+
+                divList.forEach((el, i) => {
+                    let id = el.getAttribute("data-id");
+                    el.className = "w-full flex"
+                    let del = document.createElement("div");
+                    el.innerHTML = '<div class="w-1/2">' + el.innerHTML + '</div>'
+                    el.appendChild(del);
+                    del.innerHTML = this.delIcon;
+                    del.className = "w-[100px] cursor-pointer my-2";
+
+                    del.addEventListener("click", () => {
+                        axios({
+                            method: "post",
+                            url: "/dashboard/edit",
+                            data: {
+                                id: id,
+                                delCategory: true
+                            }
+                        }).then((response) => {
+
+                            if (id === response.data.id) {
+                                Array.from(category.options).forEach((op) => {
+                                    if (id === op.value) {
+                                        op.remove();
+                                    }
+                                })
+                                el.remove();
+                            }
+                        })
+                    });
+
+                });
+                close.addEventListener("click", () => {
+                    blockCategory.remove();
+                })
+            })
         }
 
+    }
+
+    replaceNum(el) {
+        if (el) {
+            el.addEventListener("keyup", (e) => {
+                e.target.value = e.target.value.replace(/[a-z_A-Z_а-я_А-Я]/g, "");
+            })
+        }
+
+    }
+
+    editProduct() {
+        let editProduct = this.getSelector("#edit-product");
+        let editNameProduct = this.getSelector("#edit-name-product");
+        let editProductSave = this.getSelector("#edit-product-save");
+        let editTitleProduct = this.getSelector("#edit-title-product");
+        let editDescriptionProduct = this.getSelector("#edit-description-product");
+        let editTitlePageProduct = this.getSelector("#edit-title-page-product");
+        let editDescriptionPageProduct = this.getSelector("#edit-description-page-product");
+        let editKeywordProduct = this.getSelector("#edit-keyword-product");
+        let editCategory = this.getSelector("#edit-category");
+        let editSubCategory = this.getSelector("#edit-sub-category");
+        let editPriceProduct = this.getSelector("#edit-price-product");
+        let editDiscountProduct = this.getSelector("#edit-discount-product");
+        let image = this.getSelector(".image");
+        let nameImage = this.getSelector(".name-image");
+        let id = 1;
+        let editCategorySelect = this.getSelector("#add-category-product");
+        let category = this.getSelector("#category");
+        let subCategory = this.getSelector("#sub-category");
+        let file = this.getSelector("#edit-product-file")
+        if(editProduct.getAttribute("data-id")){
+            id = editProduct.getAttribute("data-id");
+        }
+        this.replaceNum(editPriceProduct);
+        this.replaceNum(editDiscountProduct);
+        this.getFiles(file,image,nameImage);
+
+
+        Array.from(editCategorySelect.options).forEach((el, i) => {
+            el.addEventListener("click", (ev) => {
+                category.getElementsByTagName("input")[0].value = ev.target.getAttribute("data-name");
+                subCategory.getElementsByTagName("input")[0].value = ev.target.getAttribute("data-sub-name");
+                category.getElementsByTagName("input")[1].value = editCategorySelect.value;
+            });
+        });
+
+        editProductSave.addEventListener("click", (el) => {
+            if (category.getElementsByTagName("input")[0].value.length > 0 && subCategory.getElementsByTagName("input")[0].value.length > 0) {
+                axios({
+                    url: "/dashboard/edit",
+                    method: "post",
+                    data: {
+                        editNameProduct: editNameProduct.value ? editNameProduct.value : "-1",
+                        editProductSave: el.target.value ? el.target.value : "-1",
+                        editTitleProduct: editTitleProduct.value ? editTitleProduct.value : "-1",
+                        editDescriptionProduct: editDescriptionProduct.value ? editDescriptionProduct.value : "-1",
+                        editTitlePageProduct: editTitlePageProduct.value ? editTitlePageProduct.value : "-1",
+                        editDescriptionPageProduct: editDescriptionPageProduct.value ? editDescriptionPageProduct.value : "-1",
+                        editKeywordProduct: editKeywordProduct.value ? editKeywordProduct.value : "-1",
+                        editPriceProduct: editPriceProduct.value ? editPriceProduct.value : "-1",
+                        editDiscountProduct: editDiscountProduct.value ? editDiscountProduct.value : "-1",
+                        image: image.src ? image.src : "-1",
+                        productId: id,
+                        subCategory: subCategory.getElementsByTagName("input")[0].value,
+                        category: category.getElementsByTagName("input")[0].value,
+                        categoryId: category.getElementsByTagName("input")[1].value
+
+                    }
+                }).then((response) => {
+                    console.log(response)
+                }).catch((response) => {
+                    console.log(response)
+                })
+            }
+
+        })
+
+    }
+
+
+    loadImage() {
+        let image = document.querySelector(".image");
+        if (image) {
+            let modalImageProduct = document.querySelectorAll(".modal-image-product");
+            modalImageProduct.forEach((el) => {
+                el.addEventListener("click", (event) => {
+                    image.src = event.target.src
+                })
+            })
+            if (document.location.search !== "") {
+                image.src = window.location.protocol + "//" + window.location.host + document.location.search.replace(/\?image=/, "/storage/images/");
+            }
+        }
+
+    }
+
+    delProduct(){
+        let del = document.querySelectorAll(".delete-product");
+        let userItem = document.querySelectorAll(".user_item");
+        if(del){
+            del.forEach((el,i)=>{
+                let id = 0;
+                el.addEventListener("click",()=>{
+                   id = el.getAttribute("data-id");
+                   axios({
+                       method:"post",
+                       url: "/dashboard/edit",
+                       data:{
+                           id:id,
+                           deleteProduct:true
+                       }
+                   }).then((response)=>{
+                       if(response.status === 200){
+                           userItem.item(i).remove()
+                       }
+
+                   })
+
+                })
+            })
+
+        }
     }
 
     view() {
@@ -528,14 +817,23 @@ console.log(el.target.files[0])
         }
         if (document.querySelector("#metrics")) {
             this.getMetrikSearchPhrases();
-           // this.getMetrikVEngines();
+            // this.getMetrikVEngines();
             this.getPageContent();
             this.trafficView();
         }
-        if(document.querySelector("#add-product")){
+        if (document.querySelector("#add-product")) {
+            this.addCategory();
             this.addProduct();
+            this.dellCategory();
         }
+        if (document.querySelector("#edit-product")) {
+            this.addCategory();
+            this.editProduct();
+            this.dellCategory();
+        }
+        this.loadImage();
         this.scrolling();
+        this.delProduct();
     }
 }
 

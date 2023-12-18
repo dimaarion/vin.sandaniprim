@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use function Pest\Laravel\get;
 
 class AdminController extends Controller
@@ -53,7 +56,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view("dashboard", ["menu" => $this->menu, "id" => "", 'users' => [], "role"=>[]]);
+        return view("dashboard", ["menu" => $this->menu, "id" => "", 'users' => [], "role" => []]);
     }
 
     /**
@@ -74,15 +77,15 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->get("category") == "removeUser"){
+        if ($request->get("category") == "removeUser") {
             $userRemove = User::find($request->get("userid"));
             $userRemove->delete();
-            Role::where("user_id",$request->get("userid"))->delete();
+            Role::where("user_id", $request->get("userid"))->delete();
 
         }
-        if($request->get("category") == "roleUser"){
+        if ($request->get("category") == "roleUser") {
             $role = new Role();
-            $role->where("user_id",$request->get("roleId"))->update(["role"=>$request->get("role")]);
+            $role->where("user_id", $request->get("roleId"))->update(["role" => $request->get("role")]);
         }
 
 
@@ -98,7 +101,11 @@ class AdminController extends Controller
     {
         $user = User::with("role")->get();
         $role = Role::all();
-        return view("dashboard", ["menu" => $this->menu, "id" => $id, "users" => $user,"role"=>$role]);
+        $category = Category::all();
+        $product = Product::all();
+        $files = Storage::disk('public')->allFiles();
+
+        return view("dashboard", ["files"=>$files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product"=>$product]);
     }
 
     /**
@@ -107,9 +114,13 @@ class AdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($name,$id)
     {
-
+        $category = Category::all();
+        $categoryId = Product::find($id)->category()->first();
+        $product = Product::find($id);
+        $files = Storage::disk('public')->allFiles();
+        return view("editproduct",["files"=>$files, "menu" => $this->menu, "category" => $category, "product"=>$product, "categoryId"=>$categoryId]);
     }
 
     /**
@@ -119,6 +130,78 @@ class AdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
+    public function addProduct(Request $request)
+    {
+        if ($request->button == "add-product-save") {
+            $product = new Product;
+            $product->name = $request->nameProduct;
+            $product->image = $request->image;
+            $product->title = $request->titleProduct;
+            $product->description = $request->descriptionProduct;
+            $product->title_meta = $request->titlePageProduct;
+            $product->description_meta = $request->descriptionPageProduct;
+            $product->keywords = $request->keyWordProduct;
+            $product->price = $request->price;
+            $product->discount = $request->discount;
+            $product->category_id = $request->categoryId;
+            $product->save();
+            return  $request;
+        }else if($request->file("file-product")){
+           return $this->loadImage($request, "/dashboard/addproduct");
+        }else{
+            return redirect("/dashboard/addproduct");
+        }
+    }
+
+    public function editProduct(Request $request){
+        if ($request->editProductSave == "edit-product-save") {
+           $product = Product::find($request->productId);
+            $product->name = $request->editNameProduct;
+            $product->image = $request->image;
+            $product->title = $request->editTitleProduct;
+            $product->description = $request->editDescriptionProduct;
+            $product->title_meta = $request->editTitlePageProduct;
+            $product->description_meta = $request->editDescriptionPageProduct;
+            $product->keywords = $request->editKeywordProduct;
+            $product->price = $request->editPriceProduct;
+            $product->discount = $request->editDiscountProduct;
+            $product->category_id = $request->categoryId;
+            $product->save();
+            $category = Category::find($request->categoryId);
+            $category->name = $request->category;
+            $category->sub_name = $request->subCategory;
+            $category->save();
+            return  $request;
+        }
+        if($request->delCategory){
+            $category = Category::find($request->id);
+            $category->delete();
+        }
+        if($request->deleteProduct){
+            $product = Product::find($request->id);
+            $product->delete();
+        }
+        if($request->file("file-product")){
+            return $this->loadImage($request, "/dashboard/edit/".$request->input("file-save"));
+        }
+        return redirect("/dashboard/edit/".$request->input("file-save"));
+    }
+
+    private function loadImage($request, $url){
+        $path =  $request->file("file-product")->store("images","public");
+        $path = preg_replace('/^images\//',"",$path);
+        return redirect($url."?image=".$path);
+    }
+
+    public function addCategory(Request $request)
+    {
+        $category = new Category;
+        $category->name = $request->name;
+        $category->sub_name = $request->subName;
+        $category->save();
+        return $request;
+    }
+
     public function update(Request $request, $id)
     {
 
