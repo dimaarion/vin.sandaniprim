@@ -7,14 +7,40 @@
             <h2 id="response" class="text-green absolute right-0"></h2>
         </div>
     </x-slot>
+
     <div class="flex flex-row overflow-y-scroll h-[800px]">
         @include("menu-left-admin")
         <div class="w-3/4 flex justify-center ml-5 mt-5 p-5 ">
             <div class="w-full">
+                <nav class="w-full rounded-md">
+                    <ol class="list-reset flex">
+                        <li>
+                            <a
+                                href="/dashboard"
+                                class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                            >Административная панель</a
+                            >
+                        </li>
+                        <li>
+                            <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                        </li>
+                        <li>
+                            <a
+                                href="/dashboard/product"
+                                class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                            >Продукция</a
+                            >
+                        </li>
+                        <li>
+                            <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                        </li>
+                        <li class="text-neutral-500 dark:text-neutral-400">{{$product->name}}</li>
+                    </ol>
+                </nav>
                 <form id="edit-product" data-id="{{$product->id}}" action="/dashboard/edit" method="post"
                       enctype="multipart/form-data">
                     @csrf
-                    <div class="relative bg-white border border-gray-200 shadow-md dark:bg-neutral-700 ">
+                    <div class="relative bg-white border border-gray-200 shadow-md dark:bg-neutral-700 mt-6">
                         <div class="flex flex-row">
                             <div class="w-1/2">
                                 <div class="relative m-6" data-te-input-wrapper-init>

@@ -46,6 +46,22 @@ class AdminController extends Controller
             ]
             ],
 
+        ], [
+            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+  <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+  <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+</svg>', 'text' => "Категории", 'item' => [
+                [
+                    'url' => "/dashboard/addCategory",
+                    'name' => "Добавить категорию"
+                ],
+                [
+                    'url' => "/dashboard/category",
+                    'name' => "Категории"
+                ]
+            ]
+            ],
+
         ],
     ];
 
@@ -104,8 +120,29 @@ class AdminController extends Controller
         $category = Category::all();
         $product = Product::all();
         $files = Storage::disk('public')->allFiles();
+        $productCategory = Category::with("product")->get();
+        $newArr = [];
+        $newArrCat = [];
+        foreach ($product as $key => $val){
+                    $newArr[$key] = ["id"=>$val->category_id];
+        }
 
-        return view("dashboard", ["files"=>$files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product"=>$product]);
+        foreach ($category as $key => $v){
+            $newArrCat[$key] = ["id"=>$v->id];
+        }
+
+       $a = array_map(function ($el,$el2){
+           return $el2 ;
+       },$newArr,$newArrCat);
+echo "<pre>";
+
+            print_r($a);
+
+
+    echo "</pre>";
+
+
+        return view("dashboard", ["files" => $files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product" => $product, "productCategory" => $productCategory]);
     }
 
     /**
@@ -114,13 +151,13 @@ class AdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($name,$id)
+    public function edit($name, $id)
     {
         $category = Category::all();
         $categoryId = Product::find($id)->category()->first();
         $product = Product::find($id);
         $files = Storage::disk('public')->allFiles();
-        return view("editproduct",["files"=>$files, "menu" => $this->menu, "category" => $category, "product"=>$product, "categoryId"=>$categoryId]);
+        return view("editproduct", ["files" => $files, "menu" => $this->menu, "category" => $category, "product" => $product, "categoryId" => $categoryId]);
     }
 
     /**
@@ -145,17 +182,18 @@ class AdminController extends Controller
             $product->discount = $request->discount;
             $product->category_id = $request->categoryId;
             $product->save();
-            return  $request;
-        }else if($request->file("file-product")){
-           return $this->loadImage($request, "/dashboard/addproduct");
-        }else{
+            return $request;
+        } else if ($request->file("file-product")) {
+            return $this->loadImage($request, "/dashboard/addproduct");
+        } else {
             return redirect("/dashboard/addproduct");
         }
     }
 
-    public function editProduct(Request $request){
+    public function editProduct(Request $request)
+    {
         if ($request->editProductSave == "edit-product-save") {
-           $product = Product::find($request->productId);
+            $product = Product::find($request->productId);
             $product->name = $request->editNameProduct;
             $product->image = $request->image;
             $product->title = $request->editTitleProduct;
@@ -171,31 +209,42 @@ class AdminController extends Controller
             $category->name = $request->category;
             $category->sub_name = $request->subCategory;
             $category->save();
-            return  $request;
+            return $request;
         }
-        if($request->delCategory){
+        if ($request->delCategory) {
             $category = Category::find($request->id);
             $category->delete();
+            return $request->id;
         }
-        if($request->deleteProduct){
+        if ($request->deleteProduct) {
             $product = Product::find($request->id);
             $product->delete();
         }
-        if($request->file("file-product")){
-            return $this->loadImage($request, "/dashboard/edit/".$request->input("file-save"));
+        if ($request->file("file-product")) {
+            return $this->loadImage($request, "/dashboard/edit/" . $request->input("file-save"));
         }
-        return redirect("/dashboard/edit/".$request->input("file-save"));
+        return redirect("/dashboard/edit/" . $request->input("file-save"));
     }
 
-    private function loadImage($request, $url){
-        $path =  $request->file("file-product")->store("images","public");
-        $path = preg_replace('/^images\//',"",$path);
-        return redirect($url."?image=".$path);
+    private function loadImage($request, $url)
+    {
+        $path = $request->file("file-product")->store("images", "public");
+        $path = preg_replace('/^images\//', "", $path);
+        return redirect($url . "?image=" . $path);
     }
 
     public function addCategory(Request $request)
     {
         $category = new Category;
+        $category->name = $request->name;
+        $category->sub_name = $request->subName;
+        $category->save();
+        return [$category->id, $category->name, $category->sub_name];
+    }
+
+    public function updateCategory(Request $request)
+    {
+        $category = Category::find($request->id);
         $category->name = $request->name;
         $category->sub_name = $request->subName;
         $category->save();
