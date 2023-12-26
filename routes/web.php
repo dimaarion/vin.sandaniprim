@@ -33,5 +33,6 @@ Route::get('/dashboard/addproduct', [\App\Http\Controllers\AdminController::clas
 Route::post("/dashboard/surliest",[\App\Http\Controllers\AdminController::class,"store"])->middleware(['auth', 'verified']);
 Route::post("/dashboard/addproduct",[\App\Http\Controllers\AdminController::class,"addProduct"])->middleware(['auth', 'verified']);
 Route::post("/dashboard/addcategory",[\App\Http\Controllers\AdminController::class,"addCategory"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/update-category",[\App\Http\Controllers\AdminController::class,"updateCategory"])->middleware(['auth', 'verified']);
 Route::post("/dashboard/edit",[\App\Http\Controllers\AdminController::class,"editProduct"])->middleware(['auth', 'verified']);
 require __DIR__.'/auth.php';

@@ -1,6 +1,6 @@
 <form id="add-product" method="post" action="/dashboard/addproduct" enctype="multipart/form-data">
     @csrf
-    <div class="relative bg-white border border-gray-200 shadow-md dark:bg-neutral-700 ">
+    <div class="relative bg-white border border-gray-200 shadow-md dark:bg-neutral-700 mt-6">
         <div class="flex flex-row">
             <div class="w-1/2">
                 <div class="relative m-6" data-te-input-wrapper-init>

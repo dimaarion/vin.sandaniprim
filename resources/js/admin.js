@@ -13,6 +13,7 @@ import {
     Ripple,
     Input,
     initTE,
+    Tab
 } from "tw-elements";
 import createForEach from "alpinejs";
 import axios from "axios";
@@ -21,7 +22,7 @@ import axios from "axios";
 window.Alpine = Alpine;
 
 Alpine.start();
-initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox, Input});
+initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox,Tab, Input});
 
 class Admin {
 
@@ -567,7 +568,6 @@ class Admin {
                     if (response.status === 200) {
                         document.location = "/dashboard/product"
                     }
-                    console.log(response)
                 })
 
             } else {
@@ -609,26 +609,103 @@ class Admin {
                         subName: addSubCategoryText.value
                     }
                 }).then((response) => {
-                    let option = document.createElement("option");
-                    categoryProduct.appendChild(option);
-                    option.value = response.data.name;
-                    option.innerHTML = response.data.name;
-
-                    console.log(response.data)
-                })
+                    if(categoryProduct){
+                        let option = document.createElement("option");
+                        categoryProduct.appendChild(option);
+                        option.value = response.data.name;
+                        option.innerHTML = response.data.name;
+                    }
+                    let table = document.querySelector("#table-category tbody");
+                    if(response.status === 200 && table){
+                       document.location = "/dashboard/addCategory";
+                    }
+                });
                 addCategoryText.value = "";
                 addCategoryText.parentElement.style.border = "";
                 addSubCategoryText.value = "";
+
+                //this.updateElement("#table-category");
             } else {
                 addCategoryText.parentElement.style.border = " 1px solid red";
             }
         })
     }
 
+    updateCategory(){
+        let icon = document.querySelectorAll(".update-category-icon");
+        if(icon){
+            icon.forEach((el,i)=>{
+                el.addEventListener("click",(event)=>{
+                    let category = document.querySelector("#update-category-text");
+                    let subCategory = document.querySelector("#update-sub-category-text");
+                    let id = document.querySelector("#update-category-id");
+                        id.value = el.getAttribute("data-id");
+                        category.value = el.getAttribute("data-name");
+                        subCategory.value = el.getAttribute("data-subname");
+                    let categoryName = document.querySelectorAll(".category-name").item(i);
+                    let categorySubName = document.querySelectorAll(".category-sub-name").item(i);
+                    let button = document.querySelector("#update-category-save");
+                    button.addEventListener("click",()=>{
+                        axios({
+                            method:"post",
+                            url:"/dashboard/update-category",
+                            data: {
+                                id:id.value,
+                                name:category.value,
+                                subName:subCategory.value
+                            }
+                        }).then((response)=>{
+                            if(response.status === 200){
+                                if(el.getAttribute("data-id") === id.value){
+                                    categoryName.innerText = category.value;
+                                    categorySubName.innerText = subCategory.value;
+                                    el.setAttribute("data-name",category.value);
+                                    el.setAttribute("data-subname",subCategory.value);
+                                }
+                            }
+
+                        })
+
+
+                    })
+                })
+            })
+
+        }
+    }
+
+
 
     dellCategory() {
         let delCategory = this.getSelector("#del-category");
         let category = this.getSelector("#add-category-product");
+        let addCategory = this.getSelector("#add-category");
+        function delCat(sel,id,el, category = undefined) {
+            sel.addEventListener("click", () => {
+                axios({
+                    method: "post",
+                    url: "/dashboard/edit",
+                    data: {
+                        id: id,
+                        delCategory: true
+                    }
+                }).then((response) => {
+                    console.log(response.data)
+                    if (id === response.data.toString()) {
+
+                        if(category){
+                            Array.from(category.options).forEach((op) => {
+                                if (id === op.value) {
+                                    op.remove();
+                                }
+                            })
+                        }
+
+                        el.remove();
+                    }
+                })
+            });
+        }
         if (delCategory) {
             delCategory.addEventListener("click", (el) => {
                 let col_1 = document.createElement("div");
@@ -645,6 +722,8 @@ class Admin {
                 close.innerHTML = this.closeIcon;
                 close.className = "absolute top-0 right-0 cursor-pointer";
 
+
+
                 divList.forEach((el, i) => {
                     let id = el.getAttribute("data-id");
                     el.className = "w-full flex"
@@ -653,36 +732,47 @@ class Admin {
                     el.appendChild(del);
                     del.innerHTML = this.delIcon;
                     del.className = "w-[100px] cursor-pointer my-2";
-
-                    del.addEventListener("click", () => {
-                        axios({
-                            method: "post",
-                            url: "/dashboard/edit",
-                            data: {
-                                id: id,
-                                delCategory: true
-                            }
-                        }).then((response) => {
-
-                            if (id === response.data.id) {
-                                Array.from(category.options).forEach((op) => {
-                                    if (id === op.value) {
-                                        op.remove();
-                                    }
-                                })
-                                el.remove();
-                            }
-                        })
-                    });
-
+                    delCat(del,id,el, category)
                 });
+
+
                 close.addEventListener("click", () => {
                     blockCategory.remove();
                 })
             })
         }
+        if(addCategory){
+            let delCategoryIcon = document.querySelectorAll(".delete-category");
+            let categoryItem = document.querySelectorAll(".category_item");
+            delCategoryIcon.forEach((el,i)=>{
+                let id = el.getAttribute("data-id");
+                    delCat(delCategoryIcon.item(i),id,categoryItem.item(i), category = undefined);
+            })
+
+        }
+
+
 
     }
+
+    updateElement(selector){
+        async function elementUpdate(selector) {
+            try {
+                var html = await (await fetch(location.href)).text();
+                var newdoc = new DOMParser().parseFromString(html, 'text/html');
+                document.querySelector(selector).outerHTML = newdoc.querySelector(selector).outerHTML;
+                console.log('Элемент '+selector+' был успешно обновлен');
+                return true;
+            } catch(err) {
+                console.log('При обновлении элемента '+selector+' произошла ошибка:');
+                console.dir(err);
+                return false;
+            }
+        }
+       return  elementUpdate(selector);
+    }
+
+
 
     replaceNum(el) {
         if (el) {
@@ -831,6 +921,14 @@ class Admin {
             this.editProduct();
             this.dellCategory();
         }
+        if (document.querySelector("#add-category")) {
+            this.addCategory();
+            this.dellCategory();
+        }
+        if (document.querySelector("#update-category-save")) {
+            this.updateCategory();
+        }
+
         this.loadImage();
         this.scrolling();
         this.delProduct();
