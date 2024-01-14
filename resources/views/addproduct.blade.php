@@ -149,7 +149,7 @@
                                Выбрать изображение
                            </button>
 
-
+                        <div id="view-price"></div>
                         <div class="relative flex flex-wrap items-stretch mt-6">
                             <input
                                 id="add-price-product"
@@ -174,7 +174,7 @@
                             />
                             <span
                                 class="flex items-center whitespace-nowrap border border-x-1 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                            >$</span
+                            >%</span
                             >
 
                         </div>

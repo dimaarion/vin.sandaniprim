@@ -17,12 +17,13 @@ import {
 } from "tw-elements";
 import createForEach from "alpinejs";
 import axios from "axios";
+import isNumeric from "alpinejs";
 
 
 window.Alpine = Alpine;
 
 Alpine.start();
-initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox,Tab, Input});
+initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox, Tab, Input});
 
 class Admin {
 
@@ -540,7 +541,6 @@ class Admin {
         })
 
 
-
         button.addEventListener("click", () => {
             if (button.value === "add-product-save") {
                 const NUMERIC_REGEXP = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g;
@@ -583,7 +583,7 @@ class Admin {
         })
     }
 
-    getFiles(file,image,nameImage){
+    getFiles(file, image, nameImage) {
         file.addEventListener("change", (el) => {
             image.src = window.URL.createObjectURL(el.target.files[0]);
             nameImage.innerHTML = el.target.files[0].name;
@@ -609,15 +609,15 @@ class Admin {
                         subName: addSubCategoryText.value
                     }
                 }).then((response) => {
-                    if(categoryProduct){
+                    if (categoryProduct) {
                         let option = document.createElement("option");
                         categoryProduct.appendChild(option);
                         option.value = response.data.name;
                         option.innerHTML = response.data.name;
                     }
                     let table = document.querySelector("#table-category tbody");
-                    if(response.status === 200 && table){
-                       document.location = "/dashboard/addCategory";
+                    if (response.status === 200 && table) {
+                        document.location = "/dashboard/addCategory";
                     }
                 });
                 addCategoryText.value = "";
@@ -631,36 +631,36 @@ class Admin {
         })
     }
 
-    updateCategory(){
+    updateCategory() {
         let icon = document.querySelectorAll(".update-category-icon");
-        if(icon){
-            icon.forEach((el,i)=>{
-                el.addEventListener("click",(event)=>{
+        if (icon) {
+            icon.forEach((el, i) => {
+                el.addEventListener("click", (event) => {
                     let category = document.querySelector("#update-category-text");
                     let subCategory = document.querySelector("#update-sub-category-text");
                     let id = document.querySelector("#update-category-id");
-                        id.value = el.getAttribute("data-id");
-                        category.value = el.getAttribute("data-name");
-                        subCategory.value = el.getAttribute("data-subname");
+                    id.value = el.getAttribute("data-id");
+                    category.value = el.getAttribute("data-name");
+                    subCategory.value = el.getAttribute("data-subname");
                     let categoryName = document.querySelectorAll(".category-name").item(i);
                     let categorySubName = document.querySelectorAll(".category-sub-name").item(i);
                     let button = document.querySelector("#update-category-save");
-                    button.addEventListener("click",()=>{
+                    button.addEventListener("click", () => {
                         axios({
-                            method:"post",
-                            url:"/dashboard/update-category",
+                            method: "post",
+                            url: "/dashboard/update-category",
                             data: {
-                                id:id.value,
-                                name:category.value,
-                                subName:subCategory.value
+                                id: id.value,
+                                name: category.value,
+                                subName: subCategory.value
                             }
-                        }).then((response)=>{
-                            if(response.status === 200){
-                                if(el.getAttribute("data-id") === id.value){
+                        }).then((response) => {
+                            if (response.status === 200) {
+                                if (el.getAttribute("data-id") === id.value) {
                                     categoryName.innerText = category.value;
                                     categorySubName.innerText = subCategory.value;
-                                    el.setAttribute("data-name",category.value);
-                                    el.setAttribute("data-subname",subCategory.value);
+                                    el.setAttribute("data-name", category.value);
+                                    el.setAttribute("data-subname", subCategory.value);
                                 }
                             }
 
@@ -675,12 +675,12 @@ class Admin {
     }
 
 
-
     dellCategory() {
         let delCategory = this.getSelector("#del-category");
         let category = this.getSelector("#add-category-product");
         let addCategory = this.getSelector("#add-category");
-        function delCat(sel,id,el, category = undefined) {
+
+        function delCat(sel, id, el, category = undefined) {
             sel.addEventListener("click", () => {
                 axios({
                     method: "post",
@@ -693,7 +693,7 @@ class Admin {
                     console.log(response.data)
                     if (id === response.data.toString()) {
 
-                        if(category){
+                        if (category) {
                             Array.from(category.options).forEach((op) => {
                                 if (id === op.value) {
                                     op.remove();
@@ -706,6 +706,7 @@ class Admin {
                 })
             });
         }
+
         if (delCategory) {
             delCategory.addEventListener("click", (el) => {
                 let col_1 = document.createElement("div");
@@ -723,7 +724,6 @@ class Admin {
                 close.className = "absolute top-0 right-0 cursor-pointer";
 
 
-
                 divList.forEach((el, i) => {
                     let id = el.getAttribute("data-id");
                     el.className = "w-full flex"
@@ -732,7 +732,7 @@ class Admin {
                     el.appendChild(del);
                     del.innerHTML = this.delIcon;
                     del.className = "w-[100px] cursor-pointer my-2";
-                    delCat(del,id,el, category)
+                    delCat(del, id, el, category)
                 });
 
 
@@ -741,37 +741,36 @@ class Admin {
                 })
             })
         }
-        if(addCategory){
+        if (addCategory) {
             let delCategoryIcon = document.querySelectorAll(".delete-category");
             let categoryItem = document.querySelectorAll(".category_item");
-            delCategoryIcon.forEach((el,i)=>{
+            delCategoryIcon.forEach((el, i) => {
                 let id = el.getAttribute("data-id");
-                    delCat(delCategoryIcon.item(i),id,categoryItem.item(i), category = undefined);
+                delCat(delCategoryIcon.item(i), id, categoryItem.item(i), category = undefined);
             })
 
         }
 
 
-
     }
 
-    updateElement(selector){
+    updateElement(selector) {
         async function elementUpdate(selector) {
             try {
                 var html = await (await fetch(location.href)).text();
                 var newdoc = new DOMParser().parseFromString(html, 'text/html');
                 document.querySelector(selector).outerHTML = newdoc.querySelector(selector).outerHTML;
-                console.log('Элемент '+selector+' был успешно обновлен');
+                console.log('Элемент ' + selector + ' был успешно обновлен');
                 return true;
-            } catch(err) {
-                console.log('При обновлении элемента '+selector+' произошла ошибка:');
+            } catch (err) {
+                console.log('При обновлении элемента ' + selector + ' произошла ошибка:');
                 console.dir(err);
                 return false;
             }
         }
-       return  elementUpdate(selector);
-    }
 
+        return elementUpdate(selector);
+    }
 
 
     replaceNum(el) {
@@ -786,6 +785,7 @@ class Admin {
     editProduct() {
         let editProduct = this.getSelector("#edit-product");
         let editNameProduct = this.getSelector("#edit-name-product");
+        let editAliasProduct = this.getSelector("#edit-alias-product");
         let editProductSave = this.getSelector("#edit-product-save");
         let editTitleProduct = this.getSelector("#edit-title-product");
         let editDescriptionProduct = this.getSelector("#edit-description-product");
@@ -803,13 +803,16 @@ class Admin {
         let category = this.getSelector("#category");
         let subCategory = this.getSelector("#sub-category");
         let file = this.getSelector("#edit-product-file")
-        if(editProduct.getAttribute("data-id")){
+        if (editProduct.getAttribute("data-id")) {
             id = editProduct.getAttribute("data-id");
         }
         this.replaceNum(editPriceProduct);
         this.replaceNum(editDiscountProduct);
-        this.getFiles(file,image,nameImage);
+        this.getFiles(file, image, nameImage);
 
+        editNameProduct.addEventListener("keyup",(e)=>{
+            editAliasProduct.value =  e.target.value.replace(/ /g, '-').toLowerCase();
+        })
 
         Array.from(editCategorySelect.options).forEach((el, i) => {
             el.addEventListener("click", (ev) => {
@@ -826,6 +829,7 @@ class Admin {
                     method: "post",
                     data: {
                         editNameProduct: editNameProduct.value ? editNameProduct.value : "-1",
+                        editAliasProduct:editAliasProduct.value?editAliasProduct.value:"-1",
                         editProductSave: el.target.value ? el.target.value : "-1",
                         editTitleProduct: editTitleProduct.value ? editTitleProduct.value : "-1",
                         editDescriptionProduct: editDescriptionProduct.value ? editDescriptionProduct.value : "-1",
@@ -842,7 +846,10 @@ class Admin {
 
                     }
                 }).then((response) => {
-                    console.log(response)
+                    if (response.status === 200) {
+                       document.location = "/dashboard/edit/" + response.data.productId;
+                    }
+
                 }).catch((response) => {
                     console.log(response)
                 })
@@ -869,33 +876,94 @@ class Admin {
 
     }
 
-    delProduct(){
+    delProduct() {
         let del = document.querySelectorAll(".delete-product");
         let userItem = document.querySelectorAll(".user_item");
-        if(del){
-            del.forEach((el,i)=>{
+        if (del) {
+            del.forEach((el, i) => {
                 let id = 0;
-                el.addEventListener("click",()=>{
-                   id = el.getAttribute("data-id");
-                   axios({
-                       method:"post",
-                       url: "/dashboard/edit",
-                       data:{
-                           id:id,
-                           deleteProduct:true
-                       }
-                   }).then((response)=>{
-                       if(response.status === 200){
-                           userItem.item(i).remove()
-                       }
+                el.addEventListener("click", () => {
+                    id = el.getAttribute("data-id");
+                    axios({
+                        method: "post",
+                        url: "/dashboard/edit",
+                        data: {
+                            id: id,
+                            deleteProduct: true
+                        }
+                    }).then((response) => {
+                        if (response.status === 200) {
+                            userItem.item(i).remove()
+                        }
 
-                   })
+                    })
 
                 })
             })
 
         }
     }
+
+    deleteFile() {
+        let image = document.querySelectorAll(".delete-image");
+        image.forEach((el) => {
+            el.addEventListener("click", () => {
+                console.log(el.getAttribute("data-name"))
+                axios({
+                    method: "post",
+                    url: "/dashboard/delete-file",
+                    data: {
+                        name: el.getAttribute("data-name")
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        document.location = "/dashboard/gallery";
+                    }
+                })
+            })
+        })
+
+    }
+
+    percent(num, pr) {
+        return num - (num * pr / 100);
+    }
+
+    discount(price, discount) {
+        let editPriceProduct = document.querySelector(price);
+        let editDiscountProduct = document.querySelector(discount);
+
+        function isRes(editPriceProduct, editDiscountProduct, percent) {
+
+            let viewPrice = document.querySelector("#view-price");
+
+            function num(val) {
+
+                if (val.length === 0) {
+                    return 0;
+                } else {
+                    return val;
+                }
+
+            }
+
+            if (parseInt(num(editDiscountProduct.value)) === 0) {
+                return viewPrice.innerHTML = '<div class="text-2xl"><div>' + num(editPriceProduct.value) + ' lei </div>';
+            } else {
+                return viewPrice.innerHTML = '<div class="text-2xl flex"><div><s class="text-gray-600">' + num(editPriceProduct.value) + ' lei </s></div><div class="ml-4"></div><div><b> ' + percent(parseInt(num(editPriceProduct.value)), parseInt(num(editDiscountProduct.value))).toFixed(2) + ' lei </b></div></div>';
+            }
+        }
+
+        isRes(editPriceProduct, editDiscountProduct, this.percent)
+        editDiscountProduct.addEventListener("keyup", () => {
+            isRes(editPriceProduct, editDiscountProduct, this.percent)
+        });
+        editPriceProduct.addEventListener("keyup", () => {
+            isRes(editPriceProduct, editDiscountProduct, this.percent)
+        })
+
+    }
+
 
     view() {
         this.dateTime();
@@ -915,11 +983,13 @@ class Admin {
             this.addCategory();
             this.addProduct();
             this.dellCategory();
+            this.discount("#add-price-product", "#add-discount-product");
         }
         if (document.querySelector("#edit-product")) {
             this.addCategory();
             this.editProduct();
             this.dellCategory();
+            this.discount("#edit-price-product", "#edit-discount-product");
         }
         if (document.querySelector("#add-category")) {
             this.addCategory();
@@ -927,6 +997,9 @@ class Admin {
         }
         if (document.querySelector("#update-category-save")) {
             this.updateCategory();
+        }
+        if (document.querySelector("#gallery")) {
+            this.deleteFile();
         }
 
         this.loadImage();

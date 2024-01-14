@@ -79,6 +79,23 @@
                         </ol>
                     </nav>
                     @include("add-category")
+                @elseif($id === "gallery")
+                    <nav class="w-full rounded-md">
+                        <ol class="list-reset flex">
+                            <li>
+                                <a
+                                    href="/dashboard"
+                                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                >Административная панель</a
+                                >
+                            </li>
+                            <li>
+                                <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                            </li>
+                            <li class="text-neutral-500 dark:text-neutral-400">Галерея</li>
+                        </ol>
+                    </nav>
+                    @include("gallery")
                 @else
                     <nav class="w-full rounded-md">
                         <ol class="list-reset flex">

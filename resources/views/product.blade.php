@@ -35,6 +35,15 @@
         >
     </li>
 </ul>
+<button
+    type="button"
+    class="inline-block mb-6 rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+    data-te-toggle="modal"
+    data-te-target="#productModal"
+    data-te-ripple-init
+    data-te-ripple-color="light">
+    Добавить
+</button>
 
 <!--Pills content for neutral-800 color-->
 <div class="mb-6">
@@ -51,7 +60,7 @@
         >
 
             <div class="relative bg-white border border-gray-200 shadow-md dark:bg-neutral-700 p-6">
-                <table class="min-w-full text-left text-xs whitespace-nowrap">
+                <table class="min-w-full text-left text-xs ">
 
                     <!-- Table head -->
                     <thead class="uppercase tracking-wider border-b-2 dark:border-neutral-600 border-t">
@@ -66,7 +75,13 @@
                             Название
                         </th>
                         <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
-                            Категория
+                            Алиас
+                        </th>
+                        <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
+                            Цена
+                        </th>
+                        <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
+                            Скидка
                         </th>
                         <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
                             Редактировать
@@ -81,13 +96,14 @@
                             <td scope="row" class="px-6 py-6 text-center border-x dark:border-neutral-600 product_id">
                                 {{$val->id}}
                             </td>
-                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_image"><img class="w-[100px]"
+                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_image flex justify-center"><img class="w-[100px]"
                                                                                                       src="{{$val->image}}">
                             </td>
-                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_name">{{$val->name == "-1"?"":$val->name}}</td>
-
-                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_name">{{$val->name == "-1"?"":$val->name}}</td>
-                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_email">
+                            <td class="px-6 py-6 border-x text-balance dark:border-neutral-600 product_name">{{$val->name == "-1"?"":$val->name}}</td>
+                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_alas">{{$val->alias == "-1"?"":$val->alias}}</td>
+                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_price text-center">{{$val->price == "-1"?0:$val->price}} lei</td>
+                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_discount text-center">{{$val->discount == "-1"?0:$val->discount}} %</td>
+                            <td class="px-6 py-6 border-x dark:border-neutral-600 product_item">
                                 <div class="flex justify-center gap-1">
                                     <div class="cursor-pointer hover:text-pink-950" title="Редактировать">
                                         <a href="/dashboard/edit/{{$val->id}}">
@@ -140,7 +156,7 @@
                         Название
                     </th>
                     <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
-                        Категория
+                        Цена
                     </th>
                     <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
                         Редактировать
@@ -151,8 +167,8 @@
                 <!-- Table body -->
                 <tbody>
                 @foreach($product as $key => $prod)
-                    @foreach($category as $cat)
-                        @if($cat->id != $prod->category_id)
+                    @foreach($idNoCategory as $key2 => $cat)
+                        @if($cat == $prod->category_id)
                             <tr class="border-b dark:border-neutral-600 user_item">
                                 <td scope="row" class="px-6 py-6 text-center border-x dark:border-neutral-600 product_id">
                                     {{$prod->id}}
@@ -192,6 +208,57 @@
                 @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+
+
+<div
+    data-te-modal-init
+    class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+    id="productModal"
+    tabindex="-1"
+    aria-labelledby="productModalLabel"
+    aria-hidden="true">
+    <div
+        data-te-modal-dialog-ref
+        class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[80%]">
+        <div
+            class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+            <div
+                class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                <!--Modal title-->
+                <h5
+                    class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+                    id="exampleModalLabel">
+                    Modal title
+                </h5>
+                <!--Close button-->
+                <button
+                    type="button"
+                    class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                    data-te-modal-dismiss
+                    aria-label="Close">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!--Modal body-->
+            <div class="relative flex-auto p-4" data-te-modal-body-ref>
+                @include("addproduct")
+            </div>
         </div>
     </div>
 </div>

@@ -61,6 +61,19 @@
                                     <input
                                         type="text"
                                         class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-alias-product"
+                                        value="{{$product->alias == "-1"?"":$product->alias}}"
+                                    />
+                                    <label
+                                        for="edit-name-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Алиас
+                                    </label>
+                                </div>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                         id="edit-title-product"
                                         placeholder="Заголовок товара"
                                         value="{{$product->title == "-1"?"":$product->title}}"
@@ -133,7 +146,8 @@
                                                 placeholder="Подкатегория"
                                                 value="@if(isset($categoryId->name)){{$categoryId->name}}@endif"
                                             />
-                                            <input class="hidden" value="@if(isset($categoryId->id)){{$categoryId->id}}@endif">
+                                            <input class="hidden"
+                                                   value="@if(isset($categoryId->id)){{$categoryId->id}}@endif">
                                             <label
                                                 for="category"
                                                 class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
@@ -155,7 +169,8 @@
                                                 placeholder="Подкатегория"
                                                 value="@if(isset($categoryId->sub_name)){{$categoryId->sub_name}}@endif"
                                             />
-                                            <input class="hidden" value="@if(isset($categoryId->id)){{$categoryId->id}}@endif">
+                                            <input class="hidden"
+                                                   value="@if(isset($categoryId->id)){{$categoryId->id}}@endif">
                                             <label
                                                 for="sub-category"
                                                 class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
@@ -245,8 +260,10 @@
                                             data-te-ripple-color="light">
                                             Выбрать изображение
                                         </button>
+                                        <div id="view-price"></div>
                                         <div class="relative flex flex-wrap items-stretch mt-6">
-                                            <label class="self-center pl-6 w-[100px]" for="edit-price-product">Цена</label>
+                                            <label class="self-center pl-6 w-[100px]"
+                                                   for="edit-price-product">Цена</label>
                                             <input
                                                 id="edit-price-product"
                                                 type="text"
@@ -262,7 +279,8 @@
 
                                         </div>
                                         <div class="relative flex flex-wrap items-stretch mt-6">
-                                            <label class="self-center pl-6 w-[100px]" for="edit-discount-product">Скидка</label>
+                                            <label class="self-center pl-6 w-[100px]"
+                                                   for="edit-discount-product">Скидка</label>
                                             <input
                                                 id="edit-discount-product"
                                                 type="text"
@@ -273,7 +291,7 @@
                                             />
                                             <span
                                                 class="flex items-center whitespace-nowrap border border-x-1 border-solid border-neutral-300 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                                            >$</span
+                                            >%</span
                                             >
 
                                         </div>

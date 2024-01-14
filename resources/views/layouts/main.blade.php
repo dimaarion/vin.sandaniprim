@@ -202,7 +202,7 @@
 <header>
     <nav>
         <div class="justify-center flex ">
-            <div class="sm:container p-2 justify-center sm:flex flex-row  ">
+            <div class="sm:container sm:p-2 justify-center sm:flex flex-row  ">
                 <div class=" w-[250px] sm:basis-1/7  sm:hidden">
                     <a href="/"><img class="w-full" src="{{@asset('storage/logo.png')}}"/></a>
                 </div>

@@ -7,11 +7,17 @@ import {
     Dropdown,
     Sidenav,
     Lightbox,
+    Collapse,
+    Select,
+    Modal,
+    Ripple,
+    Input,
     initTE,
+    Tab
 } from "tw-elements";
 import createForEach from "alpinejs";
 
-initTE({Carousel, Dropdown, Sidenav, Lightbox});
+initTE({Carousel, Dropdown, Sidenav, Collapse, Select, Modal, Ripple, Lightbox, Tab, Input});
 window.Alpine = Alpine;
 
 Alpine.start();
@@ -194,20 +200,6 @@ function sliders() {
     slider.addEventListener('mousedown', swipeStart);
 }
 
-let collidePointRect = function (pointX, pointY, x, y, xW, yW) {
-    //2d
-    if (
-        pointX >= x && // right of the left edge AND
-        pointX <= x + xW && // left of the right edge AND
-        pointY >= y && // below the top AND
-        pointY <= y + yW
-    ) {
-        // above the bottom
-
-        return true;
-    }
-    return false;
-};
 
 let defaultProduct = defaultProductCart();
 
@@ -222,6 +214,30 @@ function defaultProductCart() {
     return product.filter((f) => f.id);
 }
 
+
+function getCart(id){
+    let p = [{}];
+    if (window.localStorage.getItem("cart")) {
+        p = JSON.parse(window.localStorage.getItem("cart"));
+    }
+    return p.filter((el)=>el.id === id)[0]?p.filter((el)=>el.id === id)[0]: {count:"1"};
+}
+
+function setAddCart(el = {},id){
+    let p = [{}];
+    if (window.localStorage.getItem("cart")) {
+        p = JSON.parse(window.localStorage.getItem("cart"));
+    }
+    if (p.filter((element) => element.id === id).length === 0) {
+        p.push(el)
+        window.localStorage.setItem("cart",JSON.stringify(p));
+    }
+
+}
+
+
+
+
 //product-min product-res product-plus
 function countViewProduct(min, res, plus, count = 1, n) {
     if (!n) {
@@ -230,11 +246,57 @@ function countViewProduct(min, res, plus, count = 1, n) {
     return '<div class="p-4 flex flex-row justify-left"><div class="w-10 h-10 border justify-center flex border-gray-300 cursor-pointer select-none" id="' + min + n + '"><div  class="self-center">-</div></div><div class="w-10 h-10 border justify-center flex border-gray-300 " contentEditable = "true"><div id="' + res + n + '" class="self-center overflow-hidden" >' + count + '</div></div><div id="' + plus + n + '" class="w-10 h-10 select-none border justify-center flex border-gray-300 cursor-pointer"><div  class="self-center">+</div></div></div>';
 }
 
+
+function viewAddCartProduct(){
+    let product = document.querySelectorAll(".add-cart");
+    let cart = document.createElement("div");
+
+    product.forEach((el,i)=>{
+        let img = document.querySelectorAll(".products img").item(i)
+        let block = document.createElement("div");
+        let divLeft = document.createElement("div");
+        let divRight = document.createElement("div");
+        let btn = document.createElement("button")
+        let cart = document.createElement("div")
+        el.appendChild(block);
+        block.appendChild(divLeft)
+        block.appendChild(divRight)
+        divRight.appendChild(btn)
+        block.className = "flex flex-row justify-center";
+
+            divLeft.innerHTML = countViewProduct('product-min-add', 'product-res-add', 'product-plus-add', getCart(img.getAttribute("data-id")).count,img.getAttribute("data-id"));
+        
+       btn.className = "bg-pink-950 text-white px-4 mt-3 py-1 h-[50px] text-lg hover:bg-gray-dark";
+        btn.innerText = "В корзину";
+        btn.id = "add-cart-" + img.getAttribute("data-id");
+        countProduct(false, img.getAttribute("data-id"));
+            let id = img.getAttribute("data-id")
+           btn.addEventListener("click",()=>{
+               el = {
+                   id: img.getAttribute("data-id"),
+                   img: img.src,
+                   name: img.getAttribute("alt"),
+                   count: document.querySelector("#product-res-add" + id).textContent,
+                   price: img.getAttribute("data-price"),
+                   description: img.getAttribute("data-description")
+               }
+               setAddCart(el,id)
+               getViewCart(close)
+           })
+
+    })
+   //
+
+}
+
+
+
 function viewCardProduct(close) {
     let product = document.querySelectorAll(".product");
     product.forEach((e, i) => {
         e.getElementsByClassName("product-icon")[0].addEventListener("click", (event) => {
-            let img = e.parentElement.children[i].getElementsByTagName("img")[0];
+            e.parentElement.children.item(1)
+            let img = document.querySelectorAll(".products img").item(i);
             let div = document.createElement("div");
             let cart = document.createElement("div");
             let cartItemLeft = document.createElement("div");
@@ -256,7 +318,7 @@ function viewCardProduct(close) {
                 + '<div class="text-center text-2xl  mt-3 ">' + img.getAttribute("alt") + '</div>'
                 + '<div class="p-4 ">' + img.getAttribute("data-price") + '</div>'
                 + '<div class="p-4 ">' + img.getAttribute("data-description") + '</div>'
-                + countViewProduct('product-min', 'product-res', 'product-plus', 1)
+                + countViewProduct('product-min', 'product-res', 'product-plus', getCart(img.getAttribute("data-id")).count.match(/\d/g).join(""))
                 + '<div class="p-4"><button id="add-cart" class=" bg-pink-950 text-white px-4 py-2 text-2xl hover:bg-gray-dark">В корзину</button></div>'
                 + '<div id="close-cart" class="absolute top-0 right-0 mr-3 cursor-pointer hover:text-pink">' + close + '</div>'
                 + '</div>';
@@ -283,15 +345,20 @@ function viewCardProduct(close) {
 
 }
 
-function countProduct(count) {
+function countProduct(count,id) {
     let jsonArrProd = defaultProductCart();
     if (!count) {
         count = "";
     }
+
     let productMin = document.querySelector("#product-min" + count);
     let productRes = document.querySelector("#product-res" + count);
     let productPlus = document.querySelector("#product-plus" + count);
-
+    if(id){
+        productMin = document.querySelector("#product-min-add" + id);
+        productRes = document.querySelector("#product-res-add" + id);
+        productPlus = document.querySelector("#product-plus-add" + id);
+    }
     let productResCont = 1;
     let productResContDef = 1;
     if (productRes) {
@@ -356,11 +423,14 @@ function countProduct(count) {
 }
 
 
-function getAddCart(id, props) {
-    let productRes = document.querySelector("#product-res");
-    let addCart = document.querySelector("#add-cart");
+function getAddCart(id, props, selector = '#add-cart', selectorRes = "#product-res") {
+    let productRes = document.querySelector(selectorRes);
+    let addCart = document.querySelector(selector);
+    console.log(addCart)
     if (productRes && addCart) {
+
         addCart.addEventListener("click", () => {
+
             defaultProduct.filter((el) => el.id === id).map((el2) => el2.count = countProduct());
             window.localStorage.setItem("cart", JSON.stringify(defaultProduct));
             getLengthCart()
@@ -383,8 +453,6 @@ function getViewCart(svg) {
     } else {
         jsonCart = [{}];
     }
-
-
     document.body.appendChild(cartPanel);
     cartPanel.className = "fixed top-0 bottom-0 left-0 right-0 m-auto w-full z-50";
     closeBlock.className = "m-auto absolute right-0 cursor-pointer pt-2 pr-4 mr-2";
@@ -583,4 +651,4 @@ document.querySelectorAll(".bi-cart-fill").forEach((el) => {
 
 tabs("catalog-tab-", "products");
 contactFooter();
-
+viewAddCartProduct();

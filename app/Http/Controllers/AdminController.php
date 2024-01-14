@@ -53,11 +53,18 @@ class AdminController extends Controller
 </svg>', 'text' => "Категории", 'item' => [
                 [
                     'url' => "/dashboard/addCategory",
-                    'name' => "Добавить категорию"
-                ],
-                [
-                    'url' => "/dashboard/category",
                     'name' => "Категории"
+                ]
+            ]
+            ],
+
+        ],[
+            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-columns-gap" viewBox="0 0 16 16">
+  <path d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"/>
+</svg>', 'text' => "Галерея", 'item' => [
+                [
+                    'url' => "/dashboard/gallery",
+                    'name' => "Галерея"
                 ]
             ]
             ],
@@ -123,26 +130,16 @@ class AdminController extends Controller
         $productCategory = Category::with("product")->get();
         $newArr = [];
         $newArrCat = [];
-        foreach ($product as $key => $val){
-                    $newArr[$key] = ["id"=>$val->category_id];
+        foreach ($product as $key => $val) {
+            $newArr[$key] = $val->category_id;
         }
 
-        foreach ($category as $key => $v){
-            $newArrCat[$key] = ["id"=>$v->id];
+        foreach ($category as $key => $v) {
+            $newArrCat[$key] = $v->id;
         }
+        $idNoCategory = array_diff($newArr, $newArrCat);
 
-       $a = array_map(function ($el,$el2){
-           return $el2 ;
-       },$newArr,$newArrCat);
-echo "<pre>";
-
-            print_r($a);
-
-
-    echo "</pre>";
-
-
-        return view("dashboard", ["files" => $files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product" => $product, "productCategory" => $productCategory]);
+        return view("dashboard", ["files" => $files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product" => $product, "productCategory" => $productCategory, "idNoCategory" => $idNoCategory]);
     }
 
     /**
@@ -195,6 +192,7 @@ echo "<pre>";
         if ($request->editProductSave == "edit-product-save") {
             $product = Product::find($request->productId);
             $product->name = $request->editNameProduct;
+            $product->alias = $request->editAliasProduct;
             $product->image = $request->image;
             $product->title = $request->editTitleProduct;
             $product->description = $request->editDescriptionProduct;
@@ -226,11 +224,13 @@ echo "<pre>";
         return redirect("/dashboard/edit/" . $request->input("file-save"));
     }
 
-    private function loadImage($request, $url)
+    private function loadImage($request, $url, $name = "file-product")
     {
-        $path = $request->file("file-product")->store("images", "public");
-        $path = preg_replace('/^images\//', "", $path);
-        return redirect($url . "?image=" . $path);
+        if ($request->file($name)) {
+            $path = $request->file($name)->store("images", "public");
+            $path = preg_replace('/^images\//', "", $path);
+            return redirect($url . "?image=" . $path);
+        }
     }
 
     public function addCategory(Request $request)
@@ -250,6 +250,18 @@ echo "<pre>";
         $category->save();
         return $request;
     }
+
+    public function deleteFile(Request $request){
+        if($request->name){
+            Storage::disk('public')->delete($request->name);
+        }
+    }
+
+    public function loadingFile(Request $request){
+            return $this->loadImage($request, "/dashboard/gallery/" . $request->input("file-save-gallery"),"file-gallery");
+    }
+
+
 
     public function update(Request $request, $id)
     {

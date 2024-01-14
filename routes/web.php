@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name("home");
+Route::resource('product', \App\Http\Controllers\ProductController::class);
 Route::resource('cart', \App\Http\Controllers\CartController::class);
 
 
@@ -35,4 +36,6 @@ Route::post("/dashboard/addproduct",[\App\Http\Controllers\AdminController::clas
 Route::post("/dashboard/addcategory",[\App\Http\Controllers\AdminController::class,"addCategory"])->middleware(['auth', 'verified']);
 Route::post("/dashboard/update-category",[\App\Http\Controllers\AdminController::class,"updateCategory"])->middleware(['auth', 'verified']);
 Route::post("/dashboard/edit",[\App\Http\Controllers\AdminController::class,"editProduct"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/delete-file",[\App\Http\Controllers\AdminController::class,"deleteFile"])->middleware(['auth', 'verified']);
+Route::post("/dashboard/load-file",[\App\Http\Controllers\AdminController::class,"loadingFile"])->middleware(['auth', 'verified']);
 require __DIR__.'/auth.php';

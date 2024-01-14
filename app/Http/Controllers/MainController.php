@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -13,9 +15,11 @@ class MainController extends Controller
      */
     public function index()
     {
-        $product = [];
+        $product = Product::all();
+        $productCategory = Category::with("product")->get();
         $catalog = [];
-        return view('main',['product'=>$product,'catalog'=>$catalog]);
+
+        return view('main',['product'=>$product,'catalog'=>$catalog,"productCategory"=>$productCategory]);
     }
 
     /**
@@ -36,7 +40,7 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return "store";
     }
 
     /**
@@ -47,7 +51,7 @@ class MainController extends Controller
      */
     public function show($id)
     {
-        //
+        return $id;
     }
 
     /**
