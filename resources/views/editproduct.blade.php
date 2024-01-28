@@ -136,13 +136,79 @@
                                     >Ключевые слова
                                     </label>
                                 </div>
-                                <div class="m-4">Категория</div>
+                                <h2 class="m-6 font-bold">Характеристики</h2>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-year-product"
+                                        placeholder="Год"
+                                        value="{{$product->storage_time == "-1"?"":$product->storage_time}}" />
+                                    <label
+                                        for="edit-year-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Год
+                                    </label>
+                                </div>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-color-product"
+                                        placeholder="Цвет"
+                                        value="{{$product->color == "-1"?"":$product->color}}" />
+                                    <label
+                                        for="edit-color-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Цвет
+                                    </label>
+                                </div>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-flavor-product"
+                                        placeholder="Вкус"
+                                        value="{{$product->flavor == "-1"?"":$product->flavor}}" />
+                                    <label
+                                        for="edit-flavor-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Вкус
+                                    </label>
+                                </div>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-sort-product"
+                                        placeholder="Сорт"
+                                        value="{{$product->sort == "-1"?"":$product->sort}}" />
+                                    <label
+                                        for="edit-sort-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Сорт
+                                    </label>
+                                </div>
+                                <div class="relative m-6" data-te-input-wrapper-init>
+                                    <input
+                                        type="text"
+                                        class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                        id="edit-volume-product"
+                                        placeholder="Объем"
+                                        value="{{$product->volume == "-1"?"":$product->volume}}"/>
+                                    <label
+                                        for="edit-volume-product"
+                                        class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Объем
+                                    </label>
+                                </div>
+                                <div class="m-6 font-bold">Категория</div>
                                 <div class="m-6 flex flex-row">
                                     <div class="ml-4">
-                                        <div class="relative mb-3" id="category" data-te-input-wrapper-init>
+                                        <div class="relative mb-3 hidden" id="category" data-te-input-wrapper-init>
                                             <input
                                                 type="text"
-                                                class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                                class="peer hidden block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                                 placeholder="Подкатегория"
                                                 value="@if(isset($categoryId->name)){{$categoryId->name}}@endif"
                                             />
@@ -150,7 +216,7 @@
                                                    value="@if(isset($categoryId->id)){{$categoryId->id}}@endif">
                                             <label
                                                 for="category"
-                                                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                                class="hidden pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                                             >
                                             </label>
                                         </div>
@@ -161,7 +227,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="ml-4">
+                                    <div class="ml-4 hidden">
                                         <div class="relative mb-3" id="sub-category" data-te-input-wrapper-init>
                                             <input
                                                 type="text"
@@ -178,7 +244,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="relative w-[250px] ml-4">
+                                    <div class="relative w-[250px] ml-4 hidden">
                                         <div class="m-auto bottom-0">
                                             <div class="relative" data-te-input-wrapper-init>
                                                 <input
@@ -208,8 +274,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="w-[40px] mx-2 relative cursor-pointer"
-                                    >
+                                    <div class="w-[40px] mx-2 relative cursor-pointer hidden">
                                         <div title="Добавить категорию" id="add-category-save"
                                              class="m-auto bottom-0 absolute">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" fill="currentColor"
@@ -240,13 +305,13 @@
                                     <div class="mx-6 w-1/2">
 
                                         <input
-                                            class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                                            class="hidden relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
                                             type="file"
                                             id="edit-product-file"
                                             value="{{$product->image}}"
                                             name="file-product"
-                                            multiple/>
-                                        <button class="my-6 p-3 bg-gray-500 hover:bg-gray-700 text-white"
+                                            multiple />
+                                        <button class="hidden my-6 p-3 bg-gray-500 hover:bg-gray-700 text-white"
                                                 name="file-save" type="submit" value="{{$product->id}}">Загрузить
                                         </button>
 
@@ -303,9 +368,10 @@
                                             Изображение
                                         </div>
                                         <img class="w-full image mt-8" src="{{$product->image}}">
+                                        <div class="image-block grid-cols-2 grid gap-1 overflow-y-scroll h-[250px] mt-3"></div>
                                     </div>
                                 </div>
-                                <div class="absolute m-auto p-5 right-0 left-0 bottom-0 w-[100px]">
+                                <div class="absolute m-auto p-5 left-0 bottom-0 w-[100px]">
                                     <button id="edit-product-save" class="bg-gray-500 p-5 hover:bg-gray-700 text-white"
                                             type="button" value="edit-product-save">Сохранить
                                     </button>
@@ -356,25 +422,7 @@
                                 </div>
 
                                 <!--Modal body-->
-                                <div class="relative flex-auto p-4" data-te-modal-body-ref>
-                                    <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
-                                        <div class="-m-1 flex flex-wrap md:-m-2">
-                                            @foreach($files as $val)
-                                                @if(preg_match('[images/]',$val))
-                                                    <div class="flex w-1/3 flex-wrap">
-                                                        <div class="w-full p-1 md:p-2">
-                                                            <img
-                                                                alt="gallery"
-                                                                class="block image modal-image-product cursor-pointer h-full w-full rounded-lg object-cover object-center"
-                                                                src="{{@asset("storage/".$val)}}"/>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
-                                        </div>
-                                    </div>
-                                </div>
+                               <x-modal-gallery :files="$files" />
 
                                 <!--Modal footer-->
                                 <div

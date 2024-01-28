@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("sub_name");
+            $table->string("image");
             $table->timestamps();
         });
     }

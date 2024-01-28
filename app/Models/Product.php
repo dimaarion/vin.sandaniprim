@@ -20,6 +20,11 @@ class Product extends Model
         'keywords',
         'price',
         'discount',
+        'storage_time',
+        'color',
+        'flavor',
+        'sort',
+        'volume',
         'category_id',
     ];
 
@@ -31,4 +36,5 @@ class Product extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
 }

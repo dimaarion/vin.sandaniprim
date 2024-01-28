@@ -25,6 +25,18 @@
         >Под категория
         </label>
     </div>
+    <div class="relative mb-3 mt-6" data-te-input-wrapper-init>
+        <input
+            type="text"
+            class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+            id="add-image-category"
+            placeholder="Изображение" />
+        <label
+            for="add-image-category"
+            class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+        >Изображение
+        </label>
+    </div>
     <div class="text-right">
         <button
             id="add-category-save"
@@ -45,6 +57,9 @@
                         №
                     </th>
                     <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
+                        Иконка
+                    </th>
+                    <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
                         Название категории
                     </th>
                     <th scope="col" class="px-6 py-6 border-x text-center dark:border-neutral-600">
@@ -63,6 +78,7 @@
                         <td scope="row" class="px-6 py-6 text-center border-x dark:border-neutral-600 category_id">
                             {{$val->id}}
                         </td>
+                        <td class="px-6 py-6 border-x dark:border-neutral-600 category-image">{{$val->image == "-1"?"":$val->image}}</td>
                         <td class="px-6 py-6 border-x dark:border-neutral-600 category-name">{{$val->name == "-1"?"":$val->name}}</td>
 
                         <td class="px-6 py-6 border-x dark:border-neutral-600 category-sub-name">{{$val->sub_name == "-1"?"":$val->sub_name}}</td>
@@ -161,17 +177,29 @@
                                 type="text"
                                 class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                 id="update-sub-category-text"
-                                placeholder="Example label" />
+                                placeholder="Под категория" />
                             <label
                                 for="update-sub-category-text"
                                 class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                             >Под категория
                             </label>
                         </div>
-                        <div class="relative mb-3" >
+                        <div class="relative mb-3" data-te-input-wrapper-init>
                             <input
                                 type="text"
                                 class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                id="update-image-category"
+                                placeholder="Изображение" />
+                            <label
+                                for="update-sub-category-text"
+                                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                            >Изображение
+                            </label>
+                        </div>
+                        <div class="relative mb-3" >
+                            <input
+                                type="text"
+                                class="peer hidden block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                 id="update-category-id"
                                 />
                         </div>

@@ -522,6 +522,7 @@ class Admin {
         let file = document.querySelector("#add-product-file");
         let nameImage = document.querySelector(".name-image");
         let nameProduct = document.querySelector("#add-name-product");
+        let aliasProduct = document.querySelector("#add-alias-product");
         let titleProduct = document.querySelector("#add-title-product");
         let descriptionProduct = document.querySelector("#add-description-product");
         let titlePageProduct = document.querySelector("#add-title-page-product");
@@ -530,9 +531,15 @@ class Admin {
         let categoryProduct = document.querySelector("#add-category-product");
         let addPrice = document.querySelector("#add-price-product");
         let addDiscount = document.querySelector("#add-discount-product");
+        let storageTime = document.querySelector("#add-year-product");
+        let color = document.querySelector("#add-color-product");
+        let flavor = document.querySelector("#add-flavor-product");
+        let sort = document.querySelector("#add-sort-product");
+        let volume = document.querySelector("#add-volume-product");
 
         this.replaceNum(addPrice);
         this.replaceNum(addDiscount);
+        this.replaceAlias(nameProduct,aliasProduct)
         addPrice.addEventListener("click", (event) => {
             event.target.value = "";
         })
@@ -541,26 +548,35 @@ class Admin {
         })
 
 
+
+
         button.addEventListener("click", () => {
-            if (button.value === "add-product-save") {
+            if (button.value === "add-product-save" && this.getImageList().length > 0) {
                 const NUMERIC_REGEXP = /[-]{0,1}[\d]*[.]{0,1}[\d]+/g;
                 const numbers = addPrice.value.match(NUMERIC_REGEXP);
                 const numDisc = addDiscount.value.match(NUMERIC_REGEXP);
                 numbers ? addPrice.value = numbers.join("") : addPrice.value = 0;
                 numDisc ? addDiscount.value = numDisc.join("") : addDiscount.value = 0;
+
                 axios({
                     method: "post",
                     url: "/dashboard/addproduct",
                     data: {
                         nameProduct: nameProduct.value ? nameProduct.value : "-1",
+                        aliasProduct:aliasProduct.value?aliasProduct.value:"-1",
                         titleProduct: titleProduct.value ? titleProduct.value : "-1",
                         descriptionProduct: descriptionProduct.value ? descriptionProduct.value : "-1",
                         titlePageProduct: titlePageProduct.value ? titlePageProduct.value : "-1",
                         descriptionPageProduct: descriptionPageProduct.value ? descriptionPageProduct.value : "-1",
                         keyWordProduct: keyWordProduct.value ? keyWordProduct.value : "-1",
-                        image: image.src,
+                        image: this.getImageList().join(","),
                         price: addPrice.value,
                         discount: addDiscount.value,
+                        storageTime:storageTime.value? storageTime.value : "-1",
+                        color:color.value? color.value : "-1",
+                        flavor:flavor.value? flavor.value : "-1",
+                        sort:sort.value? sort.value : "-1",
+                        volume:volume.value? volume.value : "-1",
                         categoryId: categoryProduct.value ? categoryProduct.value : "-1",
                         button: button.value
                     }
@@ -576,11 +592,18 @@ class Admin {
 
         });
 
-
         file.addEventListener("change", (el) => {
             image.src = window.URL.createObjectURL(el.target.files[0]);
             nameImage.innerHTML = el.target.files[0].name;
         })
+    }
+
+    getImageList(selector = ".image-list"){
+        let imgArr = []
+        document.querySelectorAll(selector).forEach((el,i)=> {
+            imgArr[i] = el.src;
+        });
+       return imgArr;
     }
 
     getFiles(file, image, nameImage) {
@@ -644,6 +667,7 @@ class Admin {
                     subCategory.value = el.getAttribute("data-subname");
                     let categoryName = document.querySelectorAll(".category-name").item(i);
                     let categorySubName = document.querySelectorAll(".category-sub-name").item(i);
+                    let categoryimage = document.querySelectorAll(".category-image").item(i);
                     let button = document.querySelector("#update-category-save");
                     button.addEventListener("click", () => {
                         axios({
@@ -652,15 +676,18 @@ class Admin {
                             data: {
                                 id: id.value,
                                 name: category.value,
-                                subName: subCategory.value
+                                subName: subCategory.value,
+                                image:categoryimage.value
                             }
                         }).then((response) => {
                             if (response.status === 200) {
                                 if (el.getAttribute("data-id") === id.value) {
                                     categoryName.innerText = category.value;
                                     categorySubName.innerText = subCategory.value;
+
                                     el.setAttribute("data-name", category.value);
                                     el.setAttribute("data-subname", subCategory.value);
+                                    el.setAttribute("data-image", subCategory.value);
                                 }
                             }
 
@@ -782,6 +809,12 @@ class Admin {
 
     }
 
+    replaceAlias(name,alias){
+        name.addEventListener("keyup",(e)=>{
+            alias.value =  e.target.value.replace(/ /g, '-').toLowerCase();
+        })
+    }
+
     editProduct() {
         let editProduct = this.getSelector("#edit-product");
         let editNameProduct = this.getSelector("#edit-name-product");
@@ -802,18 +835,24 @@ class Admin {
         let editCategorySelect = this.getSelector("#add-category-product");
         let category = this.getSelector("#category");
         let subCategory = this.getSelector("#sub-category");
-        let file = this.getSelector("#edit-product-file")
+        let file = this.getSelector("#edit-product-file");
+        let imageBlock = this.getSelector('.image-block')
+        let storageTime = document.querySelector("#edit-year-product");
+        let color = document.querySelector("#edit-color-product");
+        let flavor = document.querySelector("#edit-flavor-product");
+        let sort = document.querySelector("#edit-sort-product");
+        let volume = document.querySelector("#edit-volume-product");
         if (editProduct.getAttribute("data-id")) {
             id = editProduct.getAttribute("data-id");
         }
         this.replaceNum(editPriceProduct);
         this.replaceNum(editDiscountProduct);
         this.getFiles(file, image, nameImage);
+        this.replaceAlias(editNameProduct,editAliasProduct)
 
-        editNameProduct.addEventListener("keyup",(e)=>{
-            editAliasProduct.value =  e.target.value.replace(/ /g, '-').toLowerCase();
-        })
-
+        imageBlock.innerHTML = image.src.split(",").map((el)=>'<img class="image-list" width="100px" height="100px" src="'+ el +'">').join("");
+        console.log(image.src.split(","))
+        image.src = image.src.split(",")[0]
         Array.from(editCategorySelect.options).forEach((el, i) => {
             el.addEventListener("click", (ev) => {
                 category.getElementsByTagName("input")[0].value = ev.target.getAttribute("data-name");
@@ -824,6 +863,7 @@ class Admin {
 
         editProductSave.addEventListener("click", (el) => {
             if (category.getElementsByTagName("input")[0].value.length > 0 && subCategory.getElementsByTagName("input")[0].value.length > 0) {
+
                 axios({
                     url: "/dashboard/edit",
                     method: "post",
@@ -838,10 +878,15 @@ class Admin {
                         editKeywordProduct: editKeywordProduct.value ? editKeywordProduct.value : "-1",
                         editPriceProduct: editPriceProduct.value ? editPriceProduct.value : "-1",
                         editDiscountProduct: editDiscountProduct.value ? editDiscountProduct.value : "-1",
-                        image: image.src ? image.src : "-1",
+                        image: this.getImageList().join(","),
                         productId: id,
                         subCategory: subCategory.getElementsByTagName("input")[0].value,
                         category: category.getElementsByTagName("input")[0].value,
+                        storageTime:storageTime.value? storageTime.value : "-1",
+                        color:color.value? color.value : "-1",
+                        flavor:flavor.value? flavor.value : "-1",
+                        sort:sort.value? sort.value : "-1",
+                        volume:volume.value? volume.value : "-1",
                         categoryId: category.getElementsByTagName("input")[1].value
 
                     }
@@ -862,18 +907,28 @@ class Admin {
 
     loadImage() {
         let image = document.querySelector(".image");
+        let imgTable = document.querySelector(".image-block");
+        let arrSrc = []
         if (image) {
             let modalImageProduct = document.querySelectorAll(".modal-image-product");
-            modalImageProduct.forEach((el) => {
+            modalImageProduct.forEach((el,i) => {
                 el.addEventListener("click", (event) => {
-                    image.src = event.target.src
+                    if(el.parentElement.querySelector("input").checked === false){
+                        let img = document.createElement("img");
+                        img.src = event.target.src;
+                        arrSrc.push(event.target.src);
+
+                    }
+                    el.parentElement.querySelector("input").checked = true
+                    if(arrSrc[0]){
+                        image.src = arrSrc[0];
+                    }
+                    imgTable.innerHTML = arrSrc.map((b,i)=>'<img class="image-list" width="100px" height="100px" src="'+ b +'">').join("");
                 })
             })
-            if (document.location.search !== "") {
-                image.src = window.location.protocol + "//" + window.location.host + document.location.search.replace(/\?image=/, "/storage/images/");
-            }
-        }
 
+        }
+        return arrSrc
     }
 
     delProduct() {
@@ -980,15 +1035,11 @@ class Admin {
             this.trafficView();
         }
         if (document.querySelector("#add-product")) {
-            this.addCategory();
             this.addProduct();
-            this.dellCategory();
             this.discount("#add-price-product", "#add-discount-product");
         }
         if (document.querySelector("#edit-product")) {
-            this.addCategory();
             this.editProduct();
-            this.dellCategory();
             this.discount("#edit-price-product", "#edit-discount-product");
         }
         if (document.querySelector("#add-category")) {
@@ -1002,9 +1053,9 @@ class Admin {
             this.deleteFile();
         }
 
-        this.loadImage();
         this.scrolling();
         this.delProduct();
+        this.loadImage();
     }
 }
 

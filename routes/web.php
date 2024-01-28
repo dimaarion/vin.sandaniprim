@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,16 +11,23 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name("home");
-Route::resource('product', \App\Http\Controllers\ProductController::class);
-Route::resource('cart', \App\Http\Controllers\CartController::class);
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
 
-
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,16 +35,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-Route::get('/dashboard/{name}/{id}', [\App\Http\Controllers\AdminController::class, 'edit'])->middleware(['auth', 'verified'])->name('dashboard.edit');
-Route::resource('dashboard', \App\Http\Controllers\AdminController::class)->middleware(['auth', 'verified']);
-Route::get('/dashboard/addproduct', [\App\Http\Controllers\AdminController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard.show');
-Route::post("/dashboard/surliest",[\App\Http\Controllers\AdminController::class,"store"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/addproduct",[\App\Http\Controllers\AdminController::class,"addProduct"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/addcategory",[\App\Http\Controllers\AdminController::class,"addCategory"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/update-category",[\App\Http\Controllers\AdminController::class,"updateCategory"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/edit",[\App\Http\Controllers\AdminController::class,"editProduct"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/delete-file",[\App\Http\Controllers\AdminController::class,"deleteFile"])->middleware(['auth', 'verified']);
-Route::post("/dashboard/load-file",[\App\Http\Controllers\AdminController::class,"loadingFile"])->middleware(['auth', 'verified']);
 require __DIR__.'/auth.php';

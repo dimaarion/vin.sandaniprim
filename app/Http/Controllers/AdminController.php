@@ -169,6 +169,7 @@ class AdminController extends Controller
         if ($request->button == "add-product-save") {
             $product = new Product;
             $product->name = $request->nameProduct;
+            $product->alias = $request->alias;
             $product->image = $request->image;
             $product->title = $request->titleProduct;
             $product->description = $request->descriptionProduct;
@@ -177,6 +178,11 @@ class AdminController extends Controller
             $product->keywords = $request->keyWordProduct;
             $product->price = $request->price;
             $product->discount = $request->discount;
+            $product->storage_time = $request->storageTime;
+            $product->color = $request->color;
+            $product->flavor = $request->flavor;
+            $product->sort = $request->sort;
+            $product->volume = $request->volume;
             $product->category_id = $request->categoryId;
             $product->save();
             return $request;
@@ -201,6 +207,11 @@ class AdminController extends Controller
             $product->keywords = $request->editKeywordProduct;
             $product->price = $request->editPriceProduct;
             $product->discount = $request->editDiscountProduct;
+            $product->storage_time = $request->storageTime;
+            $product->color = $request->color;
+            $product->flavor = $request->flavor;
+            $product->sort = $request->sort;
+            $product->volume = $request->volume;
             $product->category_id = $request->categoryId;
             $product->save();
             $category = Category::find($request->categoryId);
@@ -209,11 +220,7 @@ class AdminController extends Controller
             $category->save();
             return $request;
         }
-        if ($request->delCategory) {
-            $category = Category::find($request->id);
-            $category->delete();
-            return $request->id;
-        }
+
         if ($request->deleteProduct) {
             $product = Product::find($request->id);
             $product->delete();
@@ -238,6 +245,7 @@ class AdminController extends Controller
         $category = new Category;
         $category->name = $request->name;
         $category->sub_name = $request->subName;
+        $category->image = $request->image;
         $category->save();
         return [$category->id, $category->name, $category->sub_name];
     }
@@ -247,6 +255,7 @@ class AdminController extends Controller
         $category = Category::find($request->id);
         $category->name = $request->name;
         $category->sub_name = $request->subName;
+        $category->image = $request->image;
         $category->save();
         return $request;
     }

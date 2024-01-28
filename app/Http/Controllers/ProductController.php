@@ -22,6 +22,15 @@ class ProductController extends Controller
         return view('product.main',['product'=>$product,'catalog'=>$catalog,"productCategory"=>$productCategory]);
     }
 
+    public function mainProduct(){
+        header("Access-Control-Allow-Origin:*");
+        header("Content-type: application/json");
+        $productCategory = Category::with("product")->get();
+        $product = Product::all();
+        return json_encode(["category"=>$productCategory,"product"=>$product]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -52,8 +61,12 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::where("alias",$id)->first();
-        return view('product.item',['product'=>$product]);
+        $productCategory = Category::with("product")->get();
+        return view('product.item',['product'=>$product,'productCategory'=>$productCategory]);
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.

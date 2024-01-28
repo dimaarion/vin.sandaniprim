@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("alias");
-            $table->string("image");
+            $table->text("image");
             $table->string("title");
             $table->text("description");
             $table->string("title_meta");
@@ -26,6 +26,11 @@ return new class extends Migration
             $table->double("price");
             $table->double("discount");
             $table->integer("category_id");
+            $table->string("storage_time");
+            $table->string("color");
+            $table->string("flavor");
+            $table->string("sort");
+            $table->string("volume");
             $table->timestamps();
         });
     }
