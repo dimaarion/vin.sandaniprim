@@ -1,6 +1,7 @@
 <x-main-layout>
     <x-slot name="title">
         <title>Интернет магазин Молдавских вин</title>
+
     </x-slot>
     <x-slot name="header">
         <div class="bg-amber-50 ">
@@ -9,7 +10,7 @@
                 class="relative"
                 data-te-carousel-init
                 data-te-ride="false">
-                <!--Carousel indicators-->
+
                 <div
                     class="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0"
                     data-te-carousel-indicators>
@@ -158,113 +159,7 @@
         </div>
     </x-slot>
     <x-slot name="body">
-        <div class="justify-center flex slider mt-6">
-            <div class="container px-2 overflow-hidden slider-list">
-                <h2 class="text-center font-bold font-cinzel text-4xl uppercase">Каталог вин</h2>
-                <h3 class="text-center font-cinzel text-xl">
-                    Откройте для себя разнообразие вкусов молдавских вин в нашем интернет-магазине
-                </h3>
-
-
-                <div id="catalog-header"
-                     class="justify-center slider-track grid grid-flow-col auto-cols-max h-[250px]  mb-3">
-                    @foreach($productCategory as $key => $val)
-                        <div id="catalog-tab-{{$key}}" class="text-center mt-[-50px] px-2 py-2 mx-3 w-32
-@if($loop->first)
-                            active
-@endif
-                            relative slide tabs">
-                            <div
-                                class="w-[128px] h-[128px] top-0 bottom-0 left-0 catalog-item-bg right-0 m-auto bg-amber-100 rounded-full absolute"></div>
-                            <img class="w-[90%] top-0 bottom-0 left-0 right-0 m-auto absolute"
-                                 src="{{@asset('storage/catalog1.png')}}">
-                            <div class="absolute bottom-0 m-auto left-0 right-0 my-4 py-4 text-xl">{{$val->name}}</div>
-                        </div>
-                        <div class="justify-center self-center flex text-gray-700 w-[93px]">
-
-                        </div>
-                    @endforeach
-
-                </div>
-            </div>
-            <div class="slider-arrows hidden">
-                <button type="button" class="prev">&larr;</button>
-                <button type="button" class="next">&rarr;</button>
-            </div>
-        </div>
-        <div class="justify-center flex mt-3">
-            @foreach($productCategory as $key => $value)
-                <div data-tab="catalog-tab-{{$key}}"
-                     class="container products px-2 grid
-@if($loop->first)
-                         active
-@else
-                         hidden
-@endif  sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center text-center">
-                    @foreach($value->product as $val)
-                        <div class="w-[300px] md:w-full h-[406px] px-3 product border border-amber-200 ">
-
-                            <div class="relative h-[400px]">
-                                <div class="absolute bg-green text-white px-3 mt-2 py-1">Новинка</div>
-                                <div
-                                    class="absolute  text-pink-950 px-3 py-1 top-0 right-0  m-auto">@if($val->discount != 0)
-                                        -{{$val->discount}}%@endif</div>
-                                <a href="/product/{{$val->alias}}">
-                                    <img
-                                        data-id="{{$val->id}}"
-                                        alt="{{$val->name}}"
-                                        data-price="{{$val->price}} lei"
-                                        data-description="{{$val->description}}"
-                                        class="h-[200px] cursor-pointer absolute m-auto top-0 bottom-0 left-0 right-0 mt-12"
-                                        src="{{$val->image}}">
-                                </a>
-                                <div class="product-content absolute m-auto bottom-0 left-0 right-0">
-                                    <div class="text-pink-950  px-3 py-1 "><h3
-                                            class="text-2xl mt-3 product-head">{{$val->name}}</h3></div>
-                                    <div class="text-pink-950 px-3"><h3 class="text-2xl product-price">{{$val->price}}
-                                            lei</h3></div>
-                                </div>
-                                <div class="add-cart absolute bottom-0 left-0 right-0 m-auto w-full mb-1"></div>
-                                <div class="text-pink-950 px-3 absolute m-auto top-0 right-0 mt-20">
-                                    <div class="text-2xl  justify-center">
-                                        <div
-                                            class="basis-auto mt-2 bg-pink-950 w-10 h-10 justify-center flex product-icon hover:bg-gray-dark ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor"
-                                                 class="bi self-center  text-white bi-eye-fill" viewBox="0 0 16 16">
-                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                                <path
-                                                    d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                            </svg>
-                                        </div>
-                                        <div
-                                            class="basis-auto mt-6 bg-pink-950 w-10 h-10 justify-center flex product-icon hover:bg-gray-dark ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor"
-                                                 class="bi self-center  text-white bi-heart-fill" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd"
-                                                      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                            </svg>
-                                        </div>
-                                        <div
-                                            class="basis-auto mt-8 bg-pink-950 w-10 h-10 justify-center flex product-icon hover:bg-gray-dark">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor"
-                                                 class="bi self-center  text-white bi-cart-fill" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    @endforeach
-                </div>
-            @endforeach
-        </div>
+        <div id="main-add-cart"></div>
         <div class="justify-center flex mt-6 relative">
             <img class="w-full" src="{{@asset("storage/fon-baner.png")}}">
             <img class="w-1/3 absolute m-auto left-0 mt-min-1" src="{{@asset("storage/vinograd.png")}}">

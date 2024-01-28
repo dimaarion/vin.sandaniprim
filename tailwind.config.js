@@ -6,20 +6,19 @@ module.exports = {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
-        "./node_modules/tw-elements/dist/js/**/*.js",
-
+        './resources/js/**/*.jsx',
+        './node_modules/tw-elements-react/dist/js/**/*.js',
+        'node_modules/flowbite-react/lib/esm/**/*.js'
     ],
 
     theme: {
-
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
                 'serif': ['Cormorant', 'serif'],
-                'alice':['Alice','serif'],
-                'cinzel':['Cinzel','serif'],
+                'alice': ['Alice', 'serif'],
+                'cinzel': ['Cinzel', 'serif'],
             },
-
             flexBasis: {
                 '1/7': '14.2857143%',
                 '2/7': '28.5714286%',
@@ -31,17 +30,18 @@ module.exports = {
             colors: {
                 'blue': '#1fb6ff',
                 'purple': '#7e5bef',
-                'pink-hov':'#470D0D',
+                'pink-hov': '#470D0D',
                 'orange': '#ff7849',
                 'green': '#13ce66',
                 'yellow': '#ffc82c',
                 'gray-dark': '#232323',
                 'gray-light': '#d3dce6',
-                'white':'#fff',
-                'black':'#000',
-                'amber-50':'#fffbeb',
-                'amber-100':'#fef3c7',
-                'amber-200':'#fde68a',
+                'white': '#fff',
+                'black': '#000',
+                'amber-50': '#fffbeb',
+                'amber-100': '#fef3c7',
+                'amber-200': '#fde68a',
+                'yellow-200': '#FFFD52',
 
                 brown: {
                     50: '#fdf8f6',
@@ -129,18 +129,14 @@ module.exports = {
         },
         cursor: {
             'fancy': 'url(hand.cur), pointer',
-            'pointer':'pointer',
+            'pointer': 'pointer',
         }
 
     },
 
     plugins: [
-        require('@tailwindcss/typography'),
         require('@tailwindcss/forms'),
-        require('@tailwindcss/aspect-ratio'),
-        require('@tailwindcss/container-queries'),
-        require("tw-elements/dist/plugin.cjs")
-
+        require("tw-elements-react/dist/plugin.cjs"),
+        require('flowbite/plugin')
     ],
-    darkMode: "class"
 };

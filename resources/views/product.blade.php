@@ -97,7 +97,7 @@
                                 {{$val->id}}
                             </td>
                             <td class="px-6 py-6 border-x dark:border-neutral-600 product_image flex justify-center"><img class="w-[100px]"
-                                                                                                      src="{{$val->image}}">
+                                                                                                      src="{{explode(",",$val->image)[0]}}">
                             </td>
                             <td class="px-6 py-6 border-x text-balance dark:border-neutral-600 product_name">{{$val->name == "-1"?"":$val->name}}</td>
                             <td class="px-6 py-6 border-x dark:border-neutral-600 product_alas">{{$val->alias == "-1"?"":$val->alias}}</td>
