@@ -486,6 +486,7 @@ class Admin {
 
 
         this.getMetrikYear("preset=geo_country&dimensions=ga:city");
+
         document.querySelectorAll(".list-summary").forEach((summary, i) => {
             summary.addEventListener("click", () => {
                 if (i === 0) {

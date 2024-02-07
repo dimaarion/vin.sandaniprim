@@ -4,6 +4,7 @@
     html {
         @apply text-neutral-800;
     }
+
     html.dark {
         @apply text-neutral-50;
         @apply bg-neutral-800;
@@ -12,3 +13,96 @@
 
 @tailwind components;
 @tailwind utilities;
+
+
+.local-icon:after{
+    content:url("/storage/caret-down-fill.svg");
+
+    transition: 0.2s;
+    position: absolute;
+    right: 0;
+    margin-top: 6px;
+}
+.local-icon:hover:after{
+    content:url("/storage/caret-down-fill.svg");
+    transition: 0.2s;
+    --tw-translate-y: 0;
+    rotate:180deg;
+    position: absolute;
+    right: 0;
+    margin-top: -1px;
+}
+.local-icon:hover .hidden{
+    display: flex;
+}
+
+.range {
+    color: #eab308;
+}
+
+.flex-none {
+    flex: none;
+}
+
+.h-500 {
+    height: 500px;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+#category-header img {
+    border: solid 4px #ffffff;
+    transition: 1s;
+}
+
+#category-header img:hover {
+    border: solid 4px #571414;
+    transition: 1s;
+}
+
+#category-header .active {
+    border: solid 4px #571414;
+}
+
+.product-icon {
+    background-color: #571414;
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.product-icon:hover {
+    background-color: #232323;
+
+}
+
+.item-products .product-icon {
+    opacity: 0;
+}
+
+.item-products:hover .product-icon:nth-child(1) {
+    opacity: 1;
+    transition: .5s;
+    transition-delay: .1s;
+    transform: rotateX(360deg);
+}
+
+.item-products:hover .product-icon:nth-child(2) {
+    opacity: 1;
+    transition: .5s;
+    transition-delay: .2s;
+    transform: rotateX(360deg);
+}
+
+.item-products:hover .product-icon:nth-child(3) {
+    opacity: 1;
+    transition: .5s;
+    transition-delay: .3s;
+    transform: rotateX(360deg);
+}
+
+.lang:hover div {
+    display: flex;
+}

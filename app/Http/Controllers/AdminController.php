@@ -6,80 +6,24 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 use function Pest\Laravel\get;
 
 class AdminController extends Controller
 {
-    private $menu = [
-        [
-            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
-</svg>',
-                'text' => "Пользователи", 'item' => [
-                    [
-                        'url' => "/profile",
-                        'name' => "Мой профиль"
-                    ],
-                    [
-                        'url' => "/dashboard/surliest",
-                        'name' => "Список пользователей"
-                    ]
-                ]
-            ],
-
-        ],
-        [
-            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-boxes" viewBox="0 0 16 16">
-  <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
-</svg>', 'text' => "Продукты", 'item' => [
-                [
-                    'url' => "/dashboard/addproduct",
-                    'name' => "Добавить продукцию"
-                ],
-                [
-                    'url' => "/dashboard/product",
-                    'name' => "Продукция"
-                ]
-            ]
-            ],
-
-        ], [
-            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
-  <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-  <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
-</svg>', 'text' => "Категории", 'item' => [
-                [
-                    'url' => "/dashboard/addCategory",
-                    'name' => "Категории"
-                ]
-            ]
-            ],
-
-        ],[
-            'category' => ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-columns-gap" viewBox="0 0 16 16">
-  <path d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"/>
-</svg>', 'text' => "Галерея", 'item' => [
-                [
-                    'url' => "/dashboard/gallery",
-                    'name' => "Галерея"
-                ]
-            ]
-            ],
-
-        ],
-    ];
-
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index()
     {
-        return view("dashboard", ["menu" => $this->menu, "id" => "", 'users' => [], "role" => []]);
+      //   view("dashboard", ["menu" => $this->menu, "id" => "", 'users' => [], "role" => []]);
+        //return "index"; //
+        return Inertia::render('Dashboard', ["component" => "", 'users' => [], "role" => []]);
     }
 
     /**
@@ -96,21 +40,28 @@ class AdminController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function store(Request $request)
     {
+        $user = User::with("role")->get();
+        $product = Category::with("product")->get();
+        $files = Storage::disk('public')->allFiles("images");
+        $category = Category::all();
+        return Inertia::render('Dashboard', ['component' => $request->component, 'files'=>$files, 'product'=>$product,'category'=>$category, 'users' => $user, 'role' => []]);
+    }
+
+    public function role(Request $request){
         if ($request->get("category") == "removeUser") {
             $userRemove = User::find($request->get("userid"));
             $userRemove->delete();
             Role::where("user_id", $request->get("userid"))->delete();
 
         }
-        if ($request->get("category") == "roleUser") {
+        if ($request->roleUpdate == "Сохранить") {
             $role = new Role();
-            $role->where("user_id", $request->get("roleId"))->update(["role" => $request->get("role")]);
+            $role->where("user_id", $request->userId)->update(["role" => $request->role]);
         }
-
 
     }
 
@@ -139,7 +90,8 @@ class AdminController extends Controller
         }
         $idNoCategory = array_diff($newArr, $newArrCat);
 
-        return view("dashboard", ["files" => $files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product" => $product, "productCategory" => $productCategory, "idNoCategory" => $idNoCategory]);
+        //return view("dashboard", ["files" => $files, "menu" => $this->menu, "id" => $id, "users" => $user, "role" => $role, "category" => $category, "product" => $product, "productCategory" => $productCategory, "idNoCategory" => $idNoCategory]);
+       return "show"; //Inertia::render('Dashboard');
     }
 
     /**
@@ -154,7 +106,8 @@ class AdminController extends Controller
         $categoryId = Product::find($id)->category()->first();
         $product = Product::find($id);
         $files = Storage::disk('public')->allFiles();
-        return view("editproduct", ["files" => $files, "menu" => $this->menu, "category" => $category, "product" => $product, "categoryId" => $categoryId]);
+       // return view("editproduct", ["files" => $files, "menu" => $this->menu, "category" => $category, "product" => $product, "categoryId" => $categoryId]);
+        return "edit"; //Inertia::render('Dashboard');
     }
 
     /**
@@ -164,71 +117,54 @@ class AdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function addProduct(Request $request)
-    {
-        if ($request->button == "add-product-save") {
-            $product = new Product;
-            $product->name = $request->nameProduct;
-            $product->alias = $request->alias;
-            $product->image = $request->image;
-            $product->title = $request->titleProduct;
-            $product->description = $request->descriptionProduct;
-            $product->title_meta = $request->titlePageProduct;
-            $product->description_meta = $request->descriptionPageProduct;
-            $product->keywords = $request->keyWordProduct;
-            $product->price = $request->price;
-            $product->discount = $request->discount;
-            $product->storage_time = $request->storageTime;
-            $product->color = $request->color;
-            $product->flavor = $request->flavor;
-            $product->sort = $request->sort;
-            $product->volume = $request->volume;
-            $product->category_id = $request->categoryId;
-            $product->save();
-            return $request;
-        } else if ($request->file("file-product")) {
-            return $this->loadImage($request, "/dashboard/addproduct");
-        } else {
-            return redirect("/dashboard/addproduct");
-        }
-    }
 
     public function editProduct(Request $request)
     {
-        if ($request->editProductSave == "edit-product-save") {
-            $product = Product::find($request->productId);
-            $product->name = $request->editNameProduct;
-            $product->alias = $request->editAliasProduct;
-            $product->image = $request->image;
-            $product->title = $request->editTitleProduct;
-            $product->description = $request->editDescriptionProduct;
-            $product->title_meta = $request->editTitlePageProduct;
-            $product->description_meta = $request->editDescriptionPageProduct;
-            $product->keywords = $request->editKeywordProduct;
-            $product->price = $request->editPriceProduct;
-            $product->discount = $request->editDiscountProduct;
-            $product->storage_time = $request->storageTime;
-            $product->color = $request->color;
-            $product->flavor = $request->flavor;
-            $product->sort = $request->sort;
-            $product->volume = $request->volume;
-            $product->category_id = $request->categoryId;
+        function params($product,$request){
+            $product->name = empty($request->name)?"":$request->name ;
+            $product->alias = empty($request->alias)?"":$request->alias;
+            $product->image = empty($request->image)?"":$request->image;
+            $product->title = empty($request->title)?"":$request->title;
+            $product->description = empty($request->description)?"":$request->description;
+            $product->title_meta = empty($request->title_meta)?"":$request->title_meta;
+            $product->description_meta = empty($request->description_meta)?"":$request->description_meta;
+            $product->keywords = empty($request->keywords)?"":$request->keywords;
+            $product->price = empty($request->price)?"0":$request->price;
+            $product->discount = empty($request->discount)?"0":$request->discount;
+            $product->storage_time = empty($request->storage_time)?"":$request->storage_time;
+            $product->color = empty($request->color)?"":$request->color;
+            $product->flavor = empty($request->flavor)?"":$request->flavor;
+            $product->sort = empty($request->sort)?"":$request->sort;
+            $product->volume = empty($request->volume)?"":$request->volume;
+            $product->category_id = empty($request->category_id)?"0":$request->category_id;
             $product->save();
-            $category = Category::find($request->categoryId);
-            $category->name = $request->category;
-            $category->sub_name = $request->subCategory;
-            $category->save();
-            return $request;
         }
 
-        if ($request->deleteProduct) {
+
+        if ($request->button == "update-product" && !empty($request->id)) {
+            $product = Product::find($request->id);
+            params($product,$request);
+        }
+
+        if ($request->button == "add-product") {
+            $product = new Product;
+            params($product,$request);
+        }
+
+        if ($request->button == "del-product") {
             $product = Product::find($request->id);
             $product->delete();
         }
+/*
+
         if ($request->file("file-product")) {
             return $this->loadImage($request, "/dashboard/edit/" . $request->input("file-save"));
         }
+
+
         return redirect("/dashboard/edit/" . $request->input("file-save"));
+*/
+
     }
 
     private function loadImage($request, $url, $name = "file-product")
@@ -252,12 +188,29 @@ class AdminController extends Controller
 
     public function updateCategory(Request $request)
     {
-        $category = Category::find($request->id);
-        $category->name = $request->name;
-        $category->sub_name = $request->subName;
-        $category->image = $request->image;
-        $category->save();
-        return $request;
+
+        function params($category,$request){
+            $category->name = empty($request->name)?"":$request->name;
+            $category->sub_name = empty($request->sub_name)?"":$request->sub_name;
+            $category->image = empty($request->image)?"":$request->image;
+            $category->save();
+        }
+        if($request->button == "edit-category" && !empty($request->id)){
+            $category = Category::find($request->id);
+            params($category,$request);
+        }
+        if($request->button == "add-category"){
+            $category = new Category;
+            params($category,$request);
+        }
+        if($request->button == "del-category" && !empty($request->id)){
+            $category = Category::find($request->id);
+            $category->delete();
+            $category->product()->delete();
+        }
+
+
+
     }
 
     public function deleteFile(Request $request){

@@ -1,4 +1,4 @@
-<div id="surliest"
+<div
      class="overflow-x-auto bg-white border border-gray-200 shadow-md dark:bg-neutral-700 mt-6">
     <!-- Table -->
     <table class="min-w-full text-left text-xs whitespace-nowrap">

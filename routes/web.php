@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use \App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
+use \App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\AdminController;
 use Inertia\Inertia;
 
 /*
@@ -16,18 +19,26 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+//Route::resource('dashboard', AdminController::class)->middleware(['auth', 'verified']);
+
+Route::get('/dashboard',[AdminController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/{component}',[AdminController::class,'store'])->middleware(['auth', 'verified'])->name('component');
+
+Route::get('/',[MainController::class,"index"]);
+Route::get('/{locale}',[MainController::class,"index"]);
+
+Route::get('/product/{products}', [ProductController::class,'product']);
+Route::get('/{locale}/product/{alias}', [ProductController::class,'productLocale']);
+
+
+
+Route::post('/dashboard/role',[AdminController::class,'role'])->middleware(['auth', 'verified']);
+Route::post('/dashboard/edit-product',[AdminController::class,'editProduct'])->middleware(['auth', 'verified']);
+Route::post('/dashboard/category-update',[AdminController::class,'updateCategory'])->middleware(['auth', 'verified']);
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,7 +1,6 @@
 <div id="menu" class="w-[300px] sticky top-0">
     <div id="accordionExample5">
-        <div class="h-12  flex text-white bg-gray-950"><a class="block title-admin self-center ml-6 "
-                                                          href="/dashboard?date1=2023-10-21&group=month">Административная
+        <div class="h-12  flex text-white bg-gray-950"><a class="block title-admin self-center ml-6 " href="/dashboard?date1=2023-10-21&group=month">Административная
                 панель</a></div>
         @foreach($menu as $element)
             <div
@@ -43,8 +42,8 @@
                     aria-labelledby="heading{{$loop->iteration}}">
                     <div class="text-white">
                         @foreach($element["category"]["item"] as $item)
-                            <div class="h-10 hover:bg-gray-950 px-4 flex"><a class="block self-center w-full"
-                                                                             href="{{$item["url"]}}">{{$item["name"]}}</a>
+                            <div class="h-10 hover:bg-gray-950 px-4 flex">
+                                <a class="block self-center w-full" href="{{$item["url"]}}">{{$item["name"]}}</a>
                             </div>
                         @endforeach
 

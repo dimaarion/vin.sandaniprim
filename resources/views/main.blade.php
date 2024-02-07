@@ -159,7 +159,6 @@
         </div>
     </x-slot>
     <x-slot name="body">
-        <div id="main-add-cart"></div>
         <div class="justify-center flex mt-6 relative">
             <img class="w-full" src="{{@asset("storage/fon-baner.png")}}">
             <img class="w-1/3 absolute m-auto left-0 mt-min-1" src="{{@asset("storage/vinograd.png")}}">

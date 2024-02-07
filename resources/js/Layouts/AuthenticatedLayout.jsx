@@ -4,8 +4,10 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import Dayjs from "dayjs";
+import MenuLeftAdmin from "@/Components/MenuLeftAdmin";
 
-export default function Authenticated({ auth, header, children }) {
+export default function Authenticated({ auth, header, children,menu }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -121,7 +123,12 @@ export default function Authenticated({ auth, header, children }) {
                 </header>
             )}
 
-            <main>{children}</main>
+            <main>
+                {children}
+            </main>
+            <footer className="h-[300px] flex justify-center">
+               <div className="self-center text-2xl">{Dayjs().format("YYYY")} г.</div>
+            </footer>
         </div>
     );
 }

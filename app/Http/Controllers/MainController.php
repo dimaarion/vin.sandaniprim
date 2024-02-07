@@ -4,22 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+
 
 class MainController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index($locale = 'ro')
     {
         $product = Product::all();
         $productCategory = Category::with("product")->get();
-        $catalog = [];
 
-        return view('main',['product'=>$product,'catalog'=>$catalog,"productCategory"=>$productCategory]);
+        if (! in_array($locale, ['en', 'ru','ro']) || !$product) {
+            abort(404);
+        }
+
+        App::setLocale($locale);
+
+        return Inertia::render('Welcome', [
+            'product'=>$product,
+            'productCategory'=>$productCategory,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'locale'=>$locale,
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
+    }
+
+    public function indexRu()
+    {
+        $product = Product::all();
+        $productCategory = Category::with("product")->get();
+        App::setLocale("ru");
+        return Inertia::render('Welcome', [
+            'product'=>$product,
+            'productCategory'=>$productCategory,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'locale'=>'ru',
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
     }
 
     /**
