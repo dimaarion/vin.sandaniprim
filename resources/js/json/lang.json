@@ -1,0 +1,15 @@
+{
+    "homeUrl": "/|/ru|/en",
+    "mainMenu": {
+        "home": "Principala|Главная|Home"
+    },
+    "cartTitle": "Cărucior de cumpărături|Корзина|Shopping cart",
+    "cartAdd": "Adaugă in coş|В корзину|Add to cart",
+    "cartRegistration": "Pentru înregistrare|К оформлению|For registration",
+    "catalogWin": {
+        "name": "Colecția de vinuri|Каталог вин|Wine Catalog",
+        "headText": "Dezvăluiți varietatea gusturilor vinurilor moldovenești în magazinul nostru online|Откройте для себя разнообразие вкусов молдавских вин в нашем интернет-магазине|Moldovan Wine Tasting: Discover the Diversity of Flavors in Our Online Store."
+    },
+    "mainBanner": "O gamă largă de vinuri de calitate, livrate la domiciliu prin magazinul nostru online - o alegere perfectă pentru adevărații cunoscători ai băuturii.|Широкий ассортимент качественных вин с доставкой на дом в нашем интернет-магазине – идеальный выбор для истинных ценителей напитка|A wide range of quality wines delivered to your doorstep through our online store - the perfect choice for true connoisseurs of the drink.",
+    "discount": "Reducere|Скидка|Discount"
+}
