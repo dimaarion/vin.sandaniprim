@@ -1,38 +1,39 @@
 import Dayjs from "dayjs";
+
 export function percent(num, pr) {
-    return Math.floor(num - (num * pr / 100)) ;
+    return Math.floor(num - (num * pr / 100));
 }
 
-export function setStorage(el){
-        return window.localStorage.setItem("cart",JSON.stringify(el));
+export function setStorage(el) {
+    return window.localStorage.setItem("cart", JSON.stringify(el));
 }
 
-export function getStorage(){
-    if(window.localStorage.getItem("cart")){
+export function getStorage() {
+    if (window.localStorage.getItem("cart")) {
         return JSON.parse(window.localStorage.getItem("cart"));
-    }else {
+    } else {
         return [];
     }
 
 }
 
-export function setCount(cart,n = 1,id){
-    if(cart){
+export function setCount(cart, n = 1, id) {
+    if (cart) {
 
         let count = n;
-        if(!id){
-            cart.forEach((el)=>{
-                if(!el.count){
+        if (!id) {
+            cart.forEach((el) => {
+                if (!el.count) {
                     el.count = 1;
                     count = 1;
                 }
             });
-        }else {
-            cart.filter((f)=>f.id === id).forEach((el)=>{
-                if(!el.count){
+        } else {
+            cart.filter((f) => f.id === id).forEach((el) => {
+                if (!el.count) {
                     el.count = 1;
                     count = 1;
-                }else {
+                } else {
                     el.count = n;
                     count = n;
 
@@ -43,35 +44,35 @@ export function setCount(cart,n = 1,id){
     }
 }
 
-export function getTotalNumber(){
-    if(window.localStorage.getItem("cart")){
+export function getTotalNumber() {
+    if (window.localStorage.getItem("cart")) {
         let cart = JSON.parse(window.localStorage.getItem("cart"));
         let num = 0;
-        cart.forEach((el)=>{
+        cart.forEach((el) => {
             num += el.count;
         });
         return num;
     }
 }
 
-export function setSumPrice(cart, id){
+export function setSumPrice(cart, id) {
     let num = 0;
-    if(cart){
+    if (cart) {
         let cart = JSON.parse(window.localStorage.getItem("cart"));
-        cart.filter((f)=>f.id === id).forEach((el)=>{
-            el.totalPrice = el.count * percent(el.price,el.discount);
+        cart.filter((f) => f.id === id).forEach((el) => {
+            el.totalPrice = el.count * percent(el.price, el.discount);
             num = el.totalPrice
         });
-        window.localStorage.setItem("cart",JSON.stringify(cart));
+        window.localStorage.setItem("cart", JSON.stringify(cart));
         return num
     }
 }
 
-export function getTotalPrice(cart){
-    if(Array.isArray(cart)){
+export function getTotalPrice(cart) {
+    if (Array.isArray(cart)) {
         let num = 0;
-        cart.forEach((el)=>{
-            if(el.totalPrice){
+        cart.forEach((el) => {
+            if (el.totalPrice) {
                 num += el.totalPrice;
             }
 
@@ -80,11 +81,11 @@ export function getTotalPrice(cart){
     }
 }
 
-export function getTotalCount(cart){
-    if(Array.isArray(cart)){
+export function getTotalCount(cart) {
+    if (Array.isArray(cart)) {
         let num = 0;
-        cart.forEach((el)=>{
-            if(el.count){
+        cart.forEach((el) => {
+            if (el.count) {
                 num += el.count;
             }
 
@@ -93,54 +94,56 @@ export function getTotalCount(cart){
     }
 }
 
-export function getPresentation(){
-    if(window.localStorage.getItem("presentation")){
+export function getPresentation() {
+    if (window.localStorage.getItem("presentation")) {
         return JSON.parse(window.localStorage.getItem("presentation"));
-    }else {
+    } else {
         return [];
     }
 }
 
 export const params = {
-    id : 91390982,
-    key : "OAuth y0_AgAAAAALk4mfAAa0oAAAAADyNDbpfM-dOxo6SS-2k85vvD71PojCyo4",
-    date1 : "2023-01-30",
-    url : "https://api-metrika.yandex.net/stat/v1/data",
-    label: ["Пр:","Виз:","Отк:","Гл:","Вр:"],
-    height : '300px',
+    id: 91390982,
+    key: "OAuth y0_AgAAAAALk4mfAAa0oAAAAADyNDbpfM-dOxo6SS-2k85vvD71PojCyo4",
+    date1: "2023-01-30",
+    url: "https://api-metrika.yandex.net/stat/v1/data",
+    label: ["Пр:", "Виз:", "Отк:", "Гл:", "Вр:"],
+    height: '300px',
     d: new Date(),
 
     dimensions(metrikaApiJSON) {
-        if(metrikaApiJSON){
-            return metrikaApiJSON.filter((m)=>m.dimensions[0].name !== "(not set)");
+        if (metrikaApiJSON) {
+            return metrikaApiJSON.filter((m) => m.dimensions[0].name !== "(not set)");
         }
 
     },
     dimensionsName(metrikaApiJSON, n = 0) {
-            return this.dimensions(metrikaApiJSON).map((f)=>f.dimensions.map((d)=>d.name));
+        return this.dimensions(metrikaApiJSON).map((f) => f.dimensions.map((d) => d.name));
     },
-    metricsViz(metrikaApiJSON, n = 0)  {
-        if(metrikaApiJSON){
-            if(this.dimensions(metrikaApiJSON).map((d) => d.metrics[n])){
+    metricsViz(metrikaApiJSON, n = 0) {
+        if (metrikaApiJSON) {
+            if (this.dimensions(metrikaApiJSON).map((d) => d.metrics[n])) {
                 let a = [];
-                metrikaApiJSON.forEach((d,i) => {
-                        a[i] = d.metrics[n];
+                metrikaApiJSON.forEach((d, i) => {
+                    a[i] = d.metrics[n];
                 });
 
-                return a.map((el,i)=>el.reduce((a,b)=>{return a + b},0))
+                return a.map((el, i) => el.reduce((a, b) => {
+                    return a + b
+                }, 0))
             }
 
         }
     },
     metrics(metrikaApiJSON, n = 0) {
-        if(metrikaApiJSON){
+        if (metrikaApiJSON) {
             return metrikaApiJSON.map((d) => d.metrics[n]);
-        }else {
+        } else {
             return []
         }
 
     },
-    getMetrikYear(params,data,id) {
+    getMetrikYear(params, data, id) {
         fetch(
             this.url + `/bytime?${params}&lang=ru&id=${id}`, {
                 headers: {
@@ -148,10 +151,10 @@ export const params = {
                 }
             })
             .then(r => r.json())
-            .then(metrikaApiJSON =>data(metrikaApiJSON))
+            .then(metrikaApiJSON => data(metrikaApiJSON))
 
     },
-    getTraffic(data,date1,group,id){
+    getTraffic(data, date1, group, id) {
         fetch(
             this.url + `/bytime?metrics=ym:s:visits,ym:s:pageviews,ym:s:users,ga:pageviewsPerSession&date1=${date1}&group=${group}&ym:s:isRobot==No&id=${id}`, {
                 headers: {
@@ -159,10 +162,12 @@ export const params = {
                 }
             })
             .then(r => r.json())
-            .then(metrikaApiJSON => {data(metrikaApiJSON)})
+            .then(metrikaApiJSON => {
+                data(metrikaApiJSON)
+            })
     },
 
-    getMetrikSearchPhrases(data,date1,id) {
+    getMetrikSearchPhrases(data, date1, id) {
         fetch(
             this.url + '?preset=sources_search_phrases&date1=' + date1 + '&id=' + id, {
                 headers: {
@@ -174,7 +179,7 @@ export const params = {
                 data(metrikaApiJSON);
             })
     },
-    getPageContent(data,date1,id) {
+    getPageContent(data, date1, id) {
         fetch(
             this.url + '?preset=content_entrance&date1=' + date1 + '&id=' + id, {
                 headers: {
@@ -186,16 +191,16 @@ export const params = {
                 data(metrikaApiJSON);
             })
     },
-    namePage(metrikaApiJSON){
-        if(metrikaApiJSON.data){
-                return metrikaApiJSON.data.map((d)=>d.dimensions.map((n)=>[n.name,d.metrics,d.metrics.map((m,l)=>this.label[l])]));
+    namePage(metrikaApiJSON) {
+        if (metrikaApiJSON.data) {
+            return metrikaApiJSON.data.map((d) => d.dimensions.map((n) => [n.name, d.metrics, d.metrics.map((m, l) => this.label[l])]));
         }
     },
-    contentPage(metrikaApiJSON){
-        if(metrikaApiJSON.data){
+    contentPage(metrikaApiJSON) {
+        if (metrikaApiJSON.data) {
             let a = [];
-            metrikaApiJSON.data.map((f,l)=>f.dimensions.forEach((el,i)=>{
-                a[l] = [el.name,this.label,f.metrics]
+            metrikaApiJSON.data.map((f, l) => f.dimensions.forEach((el, i) => {
+                a[l] = [el.name, this.label, f.metrics]
             }))
 
             return a;
@@ -204,30 +209,29 @@ export const params = {
     },
 
 
-
-    interval_traffic(metrikaApiJSON){
-        if(metrikaApiJSON){
-            if(metrikaApiJSON.time_intervals){
-                let monts = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь','Январь'];
+    interval_traffic(metrikaApiJSON) {
+        if (metrikaApiJSON) {
+            if (metrikaApiJSON.time_intervals) {
+                let monts = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь', 'Январь'];
 
 
                 let format = "MMM"
-                if(metrikaApiJSON.query.group === "month"){
+                if (metrikaApiJSON.query.group === "month") {
                     format = "MMM"
-                }else if(metrikaApiJSON.query.group === "week"){
+                } else if (metrikaApiJSON.query.group === "week") {
                     format = "DD"
-                }else if(metrikaApiJSON.query.group === "day"){
+                } else if (metrikaApiJSON.query.group === "day") {
                     format = "DD"
-                }
-                else if(metrikaApiJSON.query.group === "hour"){
-                    format = "HH"
-                }if(metrikaApiJSON.query.group === "minute"){
+                } else if (metrikaApiJSON.query.group === "hour") {
                     format = "HH"
                 }
-                return metrikaApiJSON.time_intervals.map((m,i)=>Dayjs(m[0]).format(format));
+                if (metrikaApiJSON.query.group === "minute") {
+                    format = "HH"
+                }
+                return metrikaApiJSON.time_intervals.map((m, i) => Dayjs(m[0]).format(format));
             }
 
-        }else {
+        } else {
             return [];
         }
 
@@ -235,12 +239,23 @@ export const params = {
 }
 
 
-export function localeSeparator(el,locale){
-   return  el?locale === "ru"?el.split("|")[0]:el.split("|")[1]:""
+export function localeSeparator(el, locale, localeArr) {
+    let l = 0
+    if (localeArr) {
+        localeArr.forEach((element, i) => {
+            if (element === locale) {
+                if (el.split("|")[i]) {
+                    l = i
+                    //  return el.split("|")[i]
+                }
+            }
+        })
+    }
+    return el.split("|")[l]
+
 }
 
-export function patchLocale(locale){
-let url = document.location.pathname.split("/").filter((el)=>el !== locale).join("/");
-console.log(document.location)
-    return url === "/"?"":url;
+export function patchLocale(locale) {
+    let url = document.location.pathname.split("/").filter((el) => el !== locale).join("/");
+    return url === "/" ? "" : url;
 }

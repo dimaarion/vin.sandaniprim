@@ -87,16 +87,16 @@ export default function ProductAdmin(props) {
         <div className="mb-3">
             <TETabs justify>
                 {props.product.map((el) => <div key={el.id + "category"}><TETabsItem
-                    onClick={() => handleJustifyClick(el.name)}
-                    active={justifyActive === el.name}
+                    onClick={() => handleJustifyClick(el.sub_name)}
+                    active={justifyActive === el.sub_name}
                 >
-                    {el.name}
+                    {el.sub_name}
                 </TETabsItem></div>)}
             </TETabs>
 
             <TETabsContent>
                 {props.product.map((el) => <div key={el.id + "category"}>
-                    <TETabsPane show={justifyActive === el.name}>
+                    <TETabsPane show={justifyActive === el.sub_name}>
                         <div className="flex justify-end my-6">
                             <button
                                 onClick={() => {

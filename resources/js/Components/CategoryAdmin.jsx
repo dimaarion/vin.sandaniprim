@@ -63,7 +63,7 @@ export default function CategoryAdmin(props) {
         <div>
             {props.category.map((el, i) => <div className="flex gap-4 border-b py-4" key={i + "category"}>
                 <div className="w-[50px] h-[50px]"><img className="w-full" src={el.image} /></div>
-                <div className="w-1/4 self-center">{el.name}</div>
+                <div className="w-full self-center">{el.name}</div>
                 <div onClick={() => {
                     setShowModal(true);
                     setCategoryEdit(el);

@@ -1,28 +1,34 @@
 import {Link, Head, router} from '@inertiajs/react';
 import Main from "@/Components/Main";
 import {useEffect, useState} from "react";
-import {getStorage} from "../action"
-import {useDispatch} from "react-redux";
+import {getStorage, localeSeparator} from "../action"
+import {useDispatch, useSelector} from "react-redux";
 import ModalProduct from "@/Components/ModalProduct";
 import ModalCart from "@/Components/ModalCart";
 import Layout from "@/Layouts/Layout";
+import lang from "@/json/lang.json";
 
 export default function Welcome(props) {
     const [showModalProduct, setShowModalProduct] = useState(false);
     const [showModalTopRight, setShowModalTopRight] = useState(false);
     const [cart, setCart] = useState({el: getStorage(), id: 0});
     const dispatch = useDispatch();
-
+    const locale = useSelector((store) => store.getLocale);
+    const selectLocaleArr = useSelector((store) => store.getLocaleArr);
     useEffect(() => {
         dispatch({type: "GETPATCHPRODUCT", preload: {product: props.product, category: props.productCategory}});
-        dispatch({type:"LOCALE",preload:props.locale})
+        console.log(props)
     }, [])
 
+let headBannerText = "Fără doar de gust și aromă, vinurile moldovenești vor impresiona chiar și pe cei mai sofisticati gurmani.|" +
+    "Гармония вкуса и аромата молдавских вин не оставит равнодушным даже самого искушенного гурмана.|" +
+    "The taste and aroma of Moldovan wines will not leave indifferent even the most sophisticated gourmets.";
 
 
-    return (
+return (
         <>
             <Head title="Интернет магазин Молдавских вин"/>
+
             <div className="flex justify-center bg-amber-50 hidden lg:flex">
                 <div className="container  px-2">
                     <div className="columns-2 gap-5">
@@ -34,8 +40,7 @@ export default function Welcome(props) {
                         </div>
                         <div className="pt-12">
                             <p className="font-serif font-light text-lg  sm:text-xl  lg:text-4xl">
-                                Гармония вкуса и аромата молдавских вин не оставит равнодушным даже самого
-                                искушенного гурмана
+                                {localeSeparator(headBannerText,locale,selectLocaleArr)}
                             </p>
                         </div>
                     </div>
@@ -44,11 +49,10 @@ export default function Welcome(props) {
             </div>
             <Main showModalProduct={showModalProduct} cart={cart} setCart={setCart}
                   setShowModalTopRight={setShowModalTopRight}
-                  setShowModalProduct={setShowModalProduct} showModalTopRight={showModalTopRight}/>
+                  setShowModalProduct={setShowModalProduct}
+                  showModalTopRight={showModalTopRight} />
 
-            <ModalProduct showModal={showModalProduct} setShowModalTopRight={setShowModalTopRight}
-                          setShowModal={setShowModalProduct}/>
-            <ModalCart showModalTopRight={showModalTopRight} cart={cart} setShowModalTopRight={setShowModalTopRight}/>
+
             <div className="justify-center flex mt-6 relative">
                 <img className="w-full" src="/storage/fon-baner.png" />
                 <img className="w-1/3 absolute m-auto left-0 mt-min-1" src="/storage/vinograd.png"/>
@@ -56,9 +60,7 @@ export default function Welcome(props) {
                     className="container h-full px-2 absolute flex flex-row  text-sm sm:text-sm  md:text-2xl lg:text-4xl font-serif">
                     <div className="w-1/4"></div>
                     <div className="w-3/4 self-center relative">
-                        Широкий ассортимент качественных вин с доставкой на дом в нашем интернет-магазине –
-                        идеальный выбор
-                        для истинных ценителей напитка
+                        {localeSeparator(lang.mainBanner,locale,selectLocaleArr)}
                         <div className="absolute m-auto bottom-0 right-0 h-0 w-1/4  flex">
                             <div
                                 className="h-[32px] md:h-[72px] text-white w-full bg-pink-950 hover:bg-gray-950 self-center xl:mt-[200px]">
@@ -84,7 +86,7 @@ export default function Welcome(props) {
                                 <div className="w-1/2 text-center"></div>
                                 <div className="w-1/2 text-center mt-6 font-serif relative">
                                     <div className="text-pink-950 text-2xl px-5 leading-none">
-                                        20% Скидка
+                                        20% {localeSeparator(lang.discount,locale,selectLocaleArr)}
                                     </div>
                                     <div className=" text-xl sm:text-3xl px-5 leading-none lg:leading-tight">Фирменное
                                         розовое
@@ -107,7 +109,7 @@ export default function Welcome(props) {
                                 <div className="w-1/2 text-center"></div>
                                 <div className="w-1/2 text-center mt-6 font-serif relative">
                                     <div className="text-pink-950 text-2xl px-5 leading-none">
-                                        20% Скидка
+                                        20% {localeSeparator(lang.discount,locale,selectLocaleArr)}
                                     </div>
                                     <div className=" text-xl sm:text-3xl px-5 leading-none lg:leading-tight">Фирменное
                                         розовое
@@ -200,6 +202,9 @@ export default function Welcome(props) {
                     </div>
                 </div>
             </div>
+            <ModalProduct showModal={showModalProduct} setShowModalTopRight={setShowModalTopRight}
+                          setShowModal={setShowModalProduct}/>
+            <ModalCart showModalTopRight={showModalTopRight} cart={cart} setShowModalTopRight={setShowModalTopRight}/>
         </>
     );
 }

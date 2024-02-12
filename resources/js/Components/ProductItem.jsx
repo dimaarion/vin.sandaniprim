@@ -6,6 +6,7 @@ import Icons from "./Icons";
 import Review from "./Review";
 import ModalProduct from "@/Components/ModalProduct";
 import ModalCart from "@/Components/ModalCart";
+import {Head} from "@inertiajs/react";
 
 export default function ProductItem(props) {
     const [count, setCount] = useState(0)
@@ -16,6 +17,9 @@ export default function ProductItem(props) {
     const selectCount = useSelector((store) => store.countViewProduct);
     const selectAddCart = useSelector((store) => store.addCart);
     const countImage = useSelector((store) => store.countImage);
+    const locale = useSelector((store) => store.getLocale);
+    const selectLocaleArr = useSelector((store) => store.getLocaleArr);
+
 
     props.el.count = selectCount;
     let cartDef = selectAddCart.filter((el)=>el.id === props.el.id);
@@ -25,7 +29,9 @@ export default function ProductItem(props) {
     }, [selectAddCart])
 
 
-    return<> <div className="justify-center flex mt-6">
+    return<>
+        <Head title={product.title_meta}/>
+        <div className="justify-center flex mt-6">
         <div className="container px-2">
             <div className="grid lg:grid-cols-2 gap-6">
                 <div className="relative overflow-hidden">

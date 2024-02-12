@@ -25,13 +25,15 @@ class ProductController extends Controller
                 abort(404);
             }
         }
+
         $productCategory = Category::with("product")->get();
         $locale = 'ro';
         App::setLocale($locale);
         return Inertia::render('Product', [
             'product' => [],
             'productCategory' => $productCategory,
-            'locale' => $locale
+            'locale' => $locale,
+            'localeArray'=>$this->localeArray,
         ]);
     }
 
@@ -50,7 +52,8 @@ class ProductController extends Controller
             'product' => $product,
             'productCategory' => $productCategory,
             'locale' => $locale,
-            'category'=>'product'
+            'category'=>'product',
+            'localeArray'=>$this->localeArray,
         ]);
     }
 
@@ -58,7 +61,8 @@ class ProductController extends Controller
     {
         $product = Product::where("alias", $alias)->first();
         $productCategory = Category::with("product")->get();
-        if (! in_array($locale, ['en', 'ru','ro']) || !$product) {
+
+        if (! in_array($locale, $this->localeArray) || !$product) {
             abort(404);
         }
 
@@ -67,6 +71,7 @@ class ProductController extends Controller
             'product' => $product,
             'alias'=>$alias,
             'productCategory' => $productCategory,
+            'localeArray'=>$this->localeArray,
             'locale' => $locale,
             'category'=>'product'
         ]);

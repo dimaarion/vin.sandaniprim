@@ -1,11 +1,7 @@
 import MainMenu from "@/Components/MainMenu";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import FlagRu from "@/Components/FlagRu";
-import FlagMd from "@/Components/FlagMd";
 import MainForm from "@/Components/MainForm";
-import {Link} from "@inertiajs/react";
-import getProto from "alpinejs";
 import {patchLocale} from "@/action";
 import LocaleSvg from "@/Components/LocaleSvg";
 
@@ -17,12 +13,11 @@ export default function Headers(props) {
     const openCart = useSelector((store) => store.setRightCart);
     const dispatch = useDispatch();
     const totalCount = useSelector((store) => store.totalCount);
-    const selectLocale = useSelector((store) => store.getLocale);
-    const [locale, setLocale] = useState(props.children.locale);
+
     useEffect(()=>{
-      //  setLocale(patchLocale(props.children.locale));
-        console.log(patchLocale(props.children.locale))
-       // console.log(props.children.locale)
+        dispatch({type:"LOCALE",preload:props.children.locale});
+        dispatch({type:"LOCALEARR",preload:props.children.localeArray});
+
     },[])
     return (<>
         <div className="bg-gray-dark  text-white flex flex-row sticky top-0 z-10 h-[50px] justify-center font-alice ">
@@ -96,10 +91,8 @@ export default function Headers(props) {
                            <LocaleSvg x = {3} y={14} text = {props.children.locale}/>
                            <div className="absolute pt-10 hidden z-10 ml-[-15px] ">
                                <div className="flex bg-white pb-1 px-4">
-                                   <a href={"/"}><div className="text-gray-900 hover:text-pink-hov"><LocaleSvg x = {3} y={14}  text = "ro"/></div></a>
-                                   <a href={"/ru" + patchLocale(props.children.locale)}><div className="text-gray-900 hover:text-pink-hov"><LocaleSvg x = {3} y={14} color = "#000" text = "ru"/></div></a>
-                                   <a href={"/en" + patchLocale(props.children.locale)}><div className="text-gray-900 hover:text-pink-hov"><LocaleSvg x = {3} y={14} color = "#000" text = "en"/></div></a>
-                               </div>
+                                   {props.children.localeArray.map((locale)=>locale === "ro"?<a key={locale} href={"/"}><div className="text-gray-900 hover:text-pink-hov"><LocaleSvg x = {3} y={14}  text = "ro"/></div></a>:<a key={locale} href={"/"+ locale + patchLocale(props.children.locale)}><div className="text-gray-900 hover:text-pink-hov"><LocaleSvg x = {3} y={14} color = "#000" text ={locale}/></div></a>)}
+                                  </div>
                            </div>
                        </div>
 
@@ -142,7 +135,7 @@ export default function Headers(props) {
                             </svg>
                         }
 
-                        <div className="mb-3 xl:w-96 absolute mt-5">
+                        <div className="mb-3 w-[300px] ml-[-108px] absolute mt-5">
                             <div
                                 className={`relative mb-4 flex w-full transition ease-in-out  duration-75 flex-wrap ${search ? `opacity-1` : `opacity-0`} items-stretch`}>
                                 <input
@@ -201,7 +194,7 @@ export default function Headers(props) {
                                       d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                             </svg>}
 
-                        {login ? <div className="absolute w-[300px] ml-[-270px] mt-3">
+                        {login ? <div className="absolute w-[300px] ml-[-175px] mt-3">
                             <MainForm/>
                         </div> : <div></div>}
                     </div>

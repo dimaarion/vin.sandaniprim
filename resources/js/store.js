@@ -178,6 +178,15 @@ export function getLocale(state = "ro", action){
     }
 }
 
+export function getLocaleArr(state = [], action){
+    switch (action.type) {
+        case "LOCALEARR":
+            return state = action.preload;
+        default:
+            return state;
+    }
+}
+
 export default createStore(combineReducers(
     {
         addCart: addCart,
@@ -190,7 +199,8 @@ export default createStore(combineReducers(
         countImage:countImage,
         setRightCart:setRightCart,
         getScroll:getScroll,
-        getLocale:getLocale
+        getLocale:getLocale,
+        getLocaleArr:getLocaleArr
 
 
     }

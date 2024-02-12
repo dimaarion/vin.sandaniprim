@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {percent} from "../action";
-
+import {localeSeparator, percent} from "../action";
+import lang from "@/json/lang.json";
 import {useDispatch, useSelector} from "react-redux";
 import PriceControl from "./PriceControl";
 
@@ -9,6 +9,8 @@ export default function Cart(props) {
     const selectAddCart = useSelector((store) => store.addCart);
     const selectTotalPrice = useSelector((store) => store.totalPrice);
     const selectTotalCount = useSelector((store) => store.totalCount);
+    const locale = useSelector((store) => store.getLocale);
+    const selectLocaleArr = useSelector((store) => store.getLocaleArr);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,7 +31,7 @@ export default function Cart(props) {
                     <img className="w-full" src={el.image ? el.image.split(",")[0] : ""}/>
                 </div>
                 <div className="w-1/2">
-                    <div className="ml-4 text-sm font-bold"><h3>{el.name}</h3></div>
+                    <div className="ml-4 text-sm font-bold"><h3>{localeSeparator(el.title,locale,selectLocaleArr)}</h3></div>
                     <div className=" ml-4 text-sm flex text-gray-700">
                         <div className="cart-price-1">{el.count}</div>
                         <div className="px-3">x</div>
@@ -48,23 +50,20 @@ export default function Cart(props) {
                 </div>
             </div>
         </div>)}
-        <button onClick={() => window.localStorage.clear()}
-                className={"absolute top-0 bg-pink-950 w-1/2 mb-3 text-white px-4 mt-3 py-1 h-[50px] text-lg hover:bg-gray-dark"}>Очистить
-        </button>
         <div className={"sticky z-10 mr-6 right-0 bottom-0 bg-white border-t-1"}>
             <div className={"w-full flex text-xl"}>
-                <div className={"w-1/2"}>Сумма:</div>
+                <div className={"w-1/2"}>{localeSeparator('Sumă|Сумма|Total',locale,selectLocaleArr)}:</div>
                 <div className={"w-1/2 text-right"}>{selectTotalPrice}</div>
                 <div className={"ml-2"}>MDL</div>
             </div>
             <div className={"flex"}>
                 <button
                     className="bg-pink-950 w-1/2 mb-3 text-white px-4 mt-3 py-1 h-[50px] text-lg hover:bg-gray-dark">
-                    В корзину
+                    {localeSeparator(lang.cartAdd,locale,selectLocaleArr)}
                 </button>
                 <button
                     className="w-1/2 mb-3 text-white px-4 mt-3 py-1 h-[50px] text-lg bg-gray-dark ml-3 hover:bg-pink-950">
-                    К оформлению
+                   {localeSeparator(lang.cartRegistration,locale,selectLocaleArr)}
                 </button>
             </div>
         </div>

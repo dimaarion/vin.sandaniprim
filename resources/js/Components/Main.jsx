@@ -2,11 +2,15 @@ import {useEffect, useState} from "react";
 import Category from "./Category";
 import CategoryProduct from "./CategoryProduct";
 import {useSelector} from "react-redux";
+import {localeSeparator} from "@/action";
+import lang from "@/json/lang.json"
 export default function Main(props){
 
     const [product, setProduct] = useState([{}])
     const [id, setId] = useState(0);
     const selectProduct = useSelector((store)=>store.getPatchProduct);
+    const locale = useSelector((store) => store.getLocale);
+    const selectLocaleArr = useSelector((store) => store.getLocaleArr);
 useEffect(()=>{
     setProduct(selectProduct.category?selectProduct.category:[{}])
 },[selectProduct.category])
@@ -15,9 +19,9 @@ useEffect(()=>{
         <div className="App">
             <div className="justify-center flex slider mt-6">
                 <div className="container px-2">
-                    <h2 className="text-center font-bold font-cinzel text-4xl uppercase">Каталог вин</h2>
+                    <h2 className="text-center font-bold font-cinzel text-4xl uppercase">{localeSeparator(lang.catalogWin.name,locale,selectLocaleArr)}</h2>
                     <h3 className="text-center  text-xl">
-                        Откройте для себя разнообразие вкусов молдавских вин в нашем интернет-магазине
+                        {localeSeparator(lang.catalogWin.headText,locale,selectLocaleArr)}
                     </h3>
                     <div id="category-header"
                          className="mb-5 flex list-none flex-row flex-nowrap justify-center mt-6 overflow-auto">

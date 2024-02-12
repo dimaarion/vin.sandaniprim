@@ -10,16 +10,20 @@ import {
 import Cart from "./Cart";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import {localeSeparator} from "@/action";
+import lang from "@/json/lang.json";
 
 export default function ModalCart(props) {
-const openCart = useSelector((store)=>store.setRightCart);
+    const locale = useSelector((store) => store.getLocale);
+    const selectLocaleArr = useSelector((store) => store.getLocaleArr);
+    const openCart = useSelector((store) => store.setRightCart);
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         props.setShowModalTopRight(openCart);
-    },[openCart])
-    useEffect(()=>{
-        dispatch({type:"OPENRIGHTCART",preload:props.showModalTopRight})
-    },[props.showModalTopRight])
+    }, [openCart])
+    useEffect(() => {
+        dispatch({type: "OPENRIGHTCART", preload: props.showModalTopRight})
+    }, [props.showModalTopRight])
     return <TEModal show={props.showModalTopRight} setShow={props.setShowModalTopRight}>
         <TEModalDialog
             position="top-right"
@@ -33,7 +37,7 @@ const openCart = useSelector((store)=>store.setRightCart);
                 <TEModalHeader>
                     {/* <!--Modal title--> */}
                     <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
-                        Корзина
+                        {localeSeparator(lang.cartTitle,locale,selectLocaleArr)}
                     </h5>
                     {/* <!--Close button--> */}
                     <button
@@ -41,7 +45,7 @@ const openCart = useSelector((store)=>store.setRightCart);
                         className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
                         onClick={() => {
                             props.setShowModalTopRight(false);
-                            dispatch({type:"OPENRIGHTCART",preload:false})
+                            dispatch({type: "OPENRIGHTCART", preload: false})
                         }}
                         aria-label="Close"
                     >
@@ -63,7 +67,7 @@ const openCart = useSelector((store)=>store.setRightCart);
                 </TEModalHeader>
                 {/* <!--Modal body--> */}
                 <TEModalBody className={"relative"}>
-                    <Cart cart={props.cart} showModalTopRight = {props.showModalTopRight}/>
+                    <Cart cart={props.cart} showModalTopRight={props.showModalTopRight}/>
                 </TEModalBody>
 
             </TEModalContent>

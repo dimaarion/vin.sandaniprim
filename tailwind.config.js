@@ -8,7 +8,7 @@ module.exports = {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.jsx',
         './node_modules/tw-elements-react/dist/js/**/*.js',
-        'node_modules/flowbite-react/lib/esm/**/*.js'
+        './node_modules/flowbite-react/lib/esm/**/*.js'
     ],
 
     theme: {

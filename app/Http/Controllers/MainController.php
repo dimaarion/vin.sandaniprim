@@ -24,34 +24,19 @@ class MainController extends Controller
         $product = Product::all();
         $productCategory = Category::with("product")->get();
 
-        if (! in_array($locale, ['en', 'ru','ro']) || !$product) {
+
+        if (! in_array($locale, $this->localeArray) || !$product) {
             abort(404);
         }
 
         App::setLocale($locale);
-
         return Inertia::render('Welcome', [
             'product'=>$product,
             'productCategory'=>$productCategory,
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
             'locale'=>$locale,
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-        ]);
-    }
-
-    public function indexRu()
-    {
-        $product = Product::all();
-        $productCategory = Category::with("product")->get();
-        App::setLocale("ru");
-        return Inertia::render('Welcome', [
-            'product'=>$product,
-            'productCategory'=>$productCategory,
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'locale'=>'ru',
+            'localeArray'=>$this->localeArray,
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
         ]);
